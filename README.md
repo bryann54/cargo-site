@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-# React + TypeScript + Vite
-
 # Tested & Trusted Cargo Site
 
 Mobile-first marketing website for Tested & Trusted, a Kenyan clearing and forwarding company.

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="260" height="242" viewBox="0 0 260 242" role="img" aria-labelledby="title desc">
+  <title id="title">Tested &amp; Trusted</title>
+  <desc id="desc">The T&amp;T container-line monogram above the Tested &amp; Trusted Clearing &amp; Forwarding wordmark.</desc>
+  <g fill="none" stroke="#0f766e" stroke-width="4">
+    <rect x="82" y="4" width="96" height="96" rx="17"/>
+    <path d="M104 29h52M130 29v47M111 76h38M111 76V53h38v23" stroke-linecap="square" stroke-linejoin="miter"/>
+  </g>
+  <path d="M153 76h10" stroke="#d97706" stroke-width="4" stroke-linecap="square"/>
+  <g fill="#0f2b2c" text-anchor="middle">
+    <text x="130" y="151" font-family="Georgia,serif" font-size="29" font-weight="700" letter-spacing="-1.1">Tested &amp; Trusted</text>
+    <text x="130" y="181" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="1.6">CLEARING &amp; FORWARDING</text>
+  </g>
+  <path d="M55 211h150" stroke="#0f766e" stroke-width="1"/>
+  <text x="130" y="231" fill="#0f766e" font-family="Arial,sans-serif" font-size="9" font-weight="700" letter-spacing="2" text-anchor="middle">NAIROBI · KENYA</text>
+</svg>

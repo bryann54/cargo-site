@@ -1,14 +1,14 @@
 export const partnerGroups = [
   {
-    label: 'Shipping Lines',
-    items: ['Maersk', 'MSC', 'CMA CGM', 'Safmarine'],
+    label: 'Shipping and carrier coordination',
+    items: ['Air cargo carriers', 'Ocean shipping lines', 'Road haulage operators'],
   },
   {
-    label: 'Airlines',
-    items: ['Qatar Airways', 'Emirates', 'Kenya Airways', 'Turkish Cargo'],
+    label: 'Cargo handling',
+    items: ['Airport cargo terminals', 'Port and terminal teams', 'Warehouse operators'],
   },
   {
-    label: 'Cargo Handling & Warehousing',
-    items: ['Port Storage', 'Cold Chain', 'Bonded Warehousing', 'Regional Hub'],
+    label: 'Trade support',
+    items: ['Inspection providers', 'Documentation contacts', 'Regional delivery teams'],
   },
 ]

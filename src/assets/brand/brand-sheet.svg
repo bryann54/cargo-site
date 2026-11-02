@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="#f6f3ec"/>
+  <text x="64" y="78" fill="#0f2b2c" font-family="Georgia,serif" font-size="42" font-weight="700">Tested &amp; Trusted</text>
+  <text x="66" y="112" fill="#0f766e" font-family="Arial,sans-serif" font-size="14" font-weight="700" letter-spacing="3">CLEARING &amp; FORWARDING · BRAND SYSTEM</text>
+  <rect x="64" y="150" width="1072" height="180" rx="8" fill="#ffffff" stroke="#d7d2c8"/>
+  <svg x="130" y="190" width="456" height="88" viewBox="0 0 456 88"><g fill="none" stroke="#0f766e" stroke-width="3"><rect x="3.5" y="3.5" width="80" height="80" rx="13"/><path d="M22 25h43M43.5 25v40M29 65h29M29 65V47h29v18" stroke-linecap="square" stroke-linejoin="miter"/></g><path d="M62 65h9" stroke="#d97706" stroke-width="3"/><g fill="#0f2b2c"><text x="101" y="39" font-family="Georgia,serif" font-size="29" font-weight="700" letter-spacing="-1.1">Tested &amp; Trusted</text><text x="103" y="64" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="2.35">CLEARING &amp; FORWARDING</text></g></svg>
+  <text x="690" y="208" fill="#0f2b2c" font-family="Arial,sans-serif" font-size="18" font-weight="700">Construction</text>
+  <text x="690" y="241" fill="#4c514e" font-family="Arial,sans-serif" font-size="15">96-unit mark grid · 4-unit stroke · 17-unit frame radius</text>
+  <text x="690" y="269" fill="#4c514e" font-family="Arial,sans-serif" font-size="15">T crossbar anchors the initial; divided lower stem</text>
+  <text x="690" y="297" fill="#4c514e" font-family="Arial,sans-serif" font-size="15">suggests ordered container corrugation.</text>
+  <text x="64" y="382" fill="#0f2b2c" font-family="Arial,sans-serif" font-size="17" font-weight="700">COLOUR PALETTE</text>
+  <g font-family="Arial,sans-serif" font-size="14" fill="#0f2b2c"><rect x="64" y="400" width="250" height="88" rx="5" fill="#0f766e"/><text x="80" y="522">Primary teal · #0f766e</text><rect x="340" y="400" width="250" height="88" rx="5" fill="#0f2b2c"/><text x="356" y="522">Deep teal · #0f2b2c</text><rect x="616" y="400" width="250" height="88" rx="5" fill="#d97706"/><text x="632" y="522">Warm accent · #d97706</text><rect x="892" y="400" width="244" height="88" rx="5" fill="#f6f3ec" stroke="#d7d2c8"/><text x="908" y="522">Paper · #f6f3ec</text></g>
+  <text x="64" y="580" fill="#0f2b2c" font-family="Arial,sans-serif" font-size="17" font-weight="700">TYPE &amp; CLEAR SPACE</text>
+  <text x="64" y="612" fill="#4c514e" font-family="Arial,sans-serif" font-size="15">Headlines: Lora Variable (SIL Open Font License). UI and body: Manrope Variable (SIL Open Font License).</text>
+  <text x="64" y="640" fill="#4c514e" font-family="Arial,sans-serif" font-size="15">Reserve at least the monogram-stroke width around each lockup. Horizontal lockup minimum: 228 px wide.</text>
+  <text x="64" y="668" fill="#4c514e" font-family="Arial,sans-serif" font-size="15">Symbol minimum: 16 px. At small sizes, use the symbol-only mark; never use the wordmark below 120 px.</text>
+  <text x="64" y="716" fill="#0f2b2c" font-family="Arial,sans-serif" font-size="17" font-weight="700">USE</text>
+  <text x="64" y="746" fill="#4c514e" font-family="Arial,sans-serif" font-size="15">Use teal mark on paper/light surfaces; reversed lockup on deep teal. Keep the amber detail small.</text>
+  <text x="64" y="774" fill="#4c514e" font-family="Arial,sans-serif" font-size="15">Do not stretch, add shadows/gradients, alter spacing, or place on busy imagery without a clear field.</text>
+  <text x="64" y="844" fill="#6b706c" font-family="Arial,sans-serif" font-size="12">Concept artwork · production wordmark lettering uses licence-safe system fallbacks; replace with outlined type before external print.</text>
+</svg>

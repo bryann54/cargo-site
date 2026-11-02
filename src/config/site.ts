@@ -13,13 +13,15 @@ export const siteConfig = {
   phone: '+254 114 628 283',
   phoneHref: '+254114628283',
   email: 'Clearcrest24@gmail.com',
+  expectedReply: 'We will reply by email or WhatsApp after reviewing the shipment details.',
   address: 'Regen Complex First Floor - Suite B - Syokimau - Mombasa Road, Nairobi, P.O. Box 59355-00200 Nairobi.',
   hours: 'Mon - Sat: 8:00 AM - 6:00 PM',
+  openingHours: { weekdays: [1, 2, 3, 4, 5, 6], opensAt: '08:00', closesAt: '18:00' },
   mapUrl:
     'https://www.google.com/maps?q=Syokimau+Mombasa+Road+Nairobi&output=embed',
   whatsappNumber: '254114628283',
   whatsappMessage: 'Hello, I would like a quote for my shipment.',
-  disclaimer: 'Fast, reliable, and compliant freight support for businesses and individuals.',
+  disclaimer: 'Service and document requirements depend on the shipment and current regulations.',
   socials: [
     { label: 'Facebook', href: 'https://facebook.com', platform: 'facebook' },
     { label: 'X', href: 'https://x.com', platform: 'x' },

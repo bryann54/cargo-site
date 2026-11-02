@@ -2,23 +2,19 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { BrowserRouter, Link, NavLink, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
+import { Toaster, toast } from 'sonner'
 import {
   ArrowRight,
   ArrowUp,
   Check,
+  ChevronLeft,
   ChevronRight,
   Clock3,
-  Globe,
   Mail,
   MapPin,
   Menu,
   MessageCircle,
   Phone,
-  ShieldCheck,
-  Star,
-  Truck,
-  Warehouse,
 } from 'lucide-react'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Badge } from '@/components/ui/badge'
@@ -34,9 +30,7 @@ import { countries } from '@/data/countries'
 import { blogPosts } from '@/data/posts'
 import { partnerGroups } from '@/data/partners'
 import { serviceGroups } from '@/data/navigation'
-import { services, xToKenyaServices } from '@/data/services'
-import { testimonials } from '@/data/testimonials'
-import { useCountUp } from '@/hooks/useCountUp'
+import { services } from '@/data/services'
 import { cn } from '@/lib/utils'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { type QuoteFormValues, quoteSchema } from '@/features/quote/schema'
@@ -53,7 +47,8 @@ import servicePerishablesImage from '@/assets/service-perishables.jpg'
 import servicePharmaceuticalsImage from '@/assets/service-pharmaceuticals.jpg'
 import serviceRailImage from '@/assets/service-rail.jpg'
 import serviceWarehousingImage from '@/assets/service-warehousing.jpg'
-import tntLogoImage from '@/assets/tnt8 2.jpg'
+import { Logo } from '@/components/common/Logo'
+import { OpenNowIndicator } from '@/components/common/OpenNowIndicator'
 
 const serviceImageBySlug: Record<string, string> = {
   'air-freight': heroAirImage,
@@ -72,49 +67,40 @@ const serviceImageBySlug: Record<string, string> = {
 
 const heroSlides = [
   {
-    title: 'Fast, Reliable Clearing and Forwarding Company in Kenya',
-    subtitle: 'Trusted customs support for imports, exports and regional freight.',
-    badge: 'Trusted logistics partner',
+    title: 'Cargo moving through Kenya starts with the right paperwork.',
+    subtitle: 'We help importers prepare documents, coordinate customs clearance and plan transport through JKIA and Mombasa Port.',
+    badge: 'JKIA · Mombasa Port · Nairobi',
     image: heroGeneralImage,
   },
   {
-    title: 'Air Freight That Keeps Business Moving',
-    subtitle: 'Urgent cargo, deadline-sensitive deliveries and fast customs coordination.',
-    badge: 'Air cargo',
+    title: 'Air cargo, with the arrival details checked first.',
+    subtitle: 'Share your airway bill and invoice so the clearance steps can be reviewed before collection.',
+    badge: 'Air freight · JKIA',
     image: heroAirImage,
   },
   {
-    title: 'Ocean Freight Solutions for High-Volume Cargo',
-    subtitle: 'Responsive port handling, customs release and smooth inland logistics.',
-    badge: 'Sea cargo',
+    title: 'Sea freight from port release to the next leg.',
+    subtitle: 'We coordinate clearance documents and onward movement for shipments arriving through Mombasa Port.',
+    badge: 'Sea freight · Mombasa',
     image: heroSeaImage,
   },
   {
-    title: 'Road Freight for Regional Distribution',
-    subtitle: 'Flexible haulage and dependable last-mile transport across East Africa.',
-    badge: 'Road freight',
+    title: 'Road freight planned around the route and the load.',
+    subtitle: 'Tell us where the cargo starts, where it is going and what needs to travel with it.',
+    badge: 'Road freight · East Africa',
     image: heroRoadImage,
   },
 ]
 
-const stats = [
-  { label: 'Years of Experience', value: '15+' },
-  { label: 'Transportation Trucks', value: '50+' },
-  { label: 'Delivered Packages', value: '10,000+' },
-  { label: 'Satisfied Clients', value: '1,279+' },
-]
-
 const whyChooseUs = [
-  'Worldwide Logistics Network',
-  'Personalized Logistics Solutions',
-  'Specialized Cargo Handling',
-  '24/7 Shipment Support',
-  'On-Time Delivery Commitment',
-  'Trusted Clearing Agent',
+  'Check documents before cargo arrives',
+  'Coordinate with the relevant port or airport team',
+  'Share the next step when a document is missing',
+  'Arrange onward transport when clearance is complete',
 ]
 
 const homeServiceCards = [
-  { title: 'General Cargo', description: 'Efficient movement of everyday imports and exports with end-to-end coordination.', slug: 'general-cargo', image: serviceGeneralCargoImage },
+  { title: 'General Cargo', description: 'For goods moving by air, sea or road. Start with the route and cargo details.', slug: 'general-cargo', image: serviceGeneralCargoImage },
   { title: 'Pharmaceuticals', description: 'Temperature-sensitive handling built for compliance and reliability.', slug: 'pharmaceuticals-logistics', image: servicePharmaceuticalsImage },
   { title: 'Horticulture Exports', description: 'Fresh produce export support designed around fast turnaround and quality control.', slug: 'horticulture-exports', image: serviceHorticultureImage },
 ]
@@ -127,8 +113,6 @@ const moreServices = [
   { title: 'Warehousing', subtitle: 'Secure storage for goods awaiting dispatch or consolidation', slug: 'warehousing' },
   { title: 'Imports & Exports Consultancy', subtitle: 'Practical planning for customs and global trade operations', slug: 'imports-exports-consultancy' },
 ]
-
-const processSteps = ['Request a Quote', 'Submit Shipping Documents', 'We Clear Your Cargo', 'We Deliver']
 
 const quoteOptions = [
   'General Cargo Clearing & Forwarding',
@@ -211,13 +195,14 @@ function SiteShell() {
       <Footer setQuoteOpen={setOpen} />
       <FloatingActions showBackToTop={showBackToTop} setQuoteOpen={setOpen} />
       <QuoteDialog />
+      <Toaster position="top-center" richColors closeButton />
     </div>
   )
 }
 
 function Topbar() {
   return (
-    <div className="hidden border-b border-teal-700/30 bg-[#0f2b2c] text-sm text-slate-200 md:block">
+    <div className="hidden border-b border-white/10 bg-deep-teal text-sm text-slate-200 md:block">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2">
         <div className="flex items-center gap-4">
           {siteConfig.socials.map((social) => (
@@ -294,7 +279,7 @@ function Header({ setQuoteOpen, visible }: { setQuoteOpen: (open: boolean) => vo
     <header className={cn('fixed inset-x-0 top-0 z-40 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur transition duration-300 ease-out', visible ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-full opacity-0')}>
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4">
         <Link to="/" className="order-2 flex min-w-0 items-center lg:order-1">
-          <img src={tntLogoImage} alt="Tested & Trusted Logistics" className="h-12 w-40 rounded-lg object-cover object-[50%_75%] sm:h-14 sm:w-48" />
+          <Logo className="h-12 w-56 sm:h-14 sm:w-64" />
         </Link>
 
         <nav className="order-2 hidden items-center gap-6 lg:flex">
@@ -315,13 +300,6 @@ function Header({ setQuoteOpen, visible }: { setQuoteOpen: (open: boolean) => vo
                         <li key={item}>{item}</li>
                       ))}
                     </ul>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-4 grid grid-cols-3 gap-3 border-t border-slate-200 pt-4">
-                {[1, 2, 3].map((index) => (
-                  <div key={index} className="overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
-                    <div className="h-20 bg-gradient-to-br from-teal-100 to-slate-100" />
                   </div>
                 ))}
               </div>
@@ -349,7 +327,7 @@ function Header({ setQuoteOpen, visible }: { setQuoteOpen: (open: boolean) => vo
             <SheetContent side="left" className="w-[min(88vw,360px)] overflow-y-auto p-0">
               <div className="space-y-4 p-5">
                 <div className="flex items-center justify-between">
-                  <img src={tntLogoImage} alt="Tested & Trusted" className="h-12 w-40 rounded-lg object-cover object-[50%_75%]" />
+                  <Logo className="h-12 w-56" />
                 </div>
                 <div className="space-y-2">
                   {['/', '/about', '/services', '/partnerships', '/blogs', '/contact'].map((href) => (
@@ -390,11 +368,11 @@ function FooterInner({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }
   const currentYear = CURRENT_YEAR
 
   return (
-    <footer className="bg-[#0f2b2c] text-slate-200">
+    <footer className="bg-deep-teal text-slate-200">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 md:grid-cols-2 xl:grid-cols-4">
         <div>
           <div className="mb-4 flex items-center gap-3">
-            <img src={tntLogoImage} alt="Tested & Trusted Logistics" className="h-14 w-44 rounded-lg object-cover object-[50%_75%]" />
+            <Logo className="mb-4 h-14 w-64" tone="light" />
           </div>
           <p className="mb-4 text-sm text-slate-300">{siteConfig.tagline}</p>
           <Button onClick={() => setQuoteOpen(true)} className="mb-4">Request Quote</Button>
@@ -459,7 +437,7 @@ function FloatingActions({ showBackToTop, setQuoteOpen }: { showBackToTop: boole
           <span className="pointer-events-none absolute right-[calc(100%+0.75rem)] top-1/2 -translate-y-1/2 whitespace-nowrap rounded-lg bg-slate-900 px-3 py-2 text-xs font-semibold text-white opacity-0 shadow-lg transition group-hover:opacity-100 group-focus-within:opacity-100">Chat on WhatsApp</span>
         </div>
         <div className="group relative">
-          <button type="button" onClick={() => setQuoteOpen(true)} aria-label="Request a quote" className="flex h-14 w-14 items-center justify-center rounded-full bg-[#0f2b2c] text-white shadow-lg shadow-slate-900/20 ring-4 ring-white transition duration-200 hover:scale-105 hover:bg-[#174342] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cyan-200">
+          <button type="button" onClick={() => setQuoteOpen(true)} aria-label="Request a quote" className="flex h-14 w-14 items-center justify-center rounded-full bg-deep-teal text-white shadow-lg shadow-slate-900/20 ring-4 ring-white transition duration-200 hover:scale-105 hover:bg-[#174342] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cyan-200">
             <ArrowRight className="h-6 w-6 text-cyan-300" />
           </button>
           <span className="pointer-events-none absolute right-[calc(100%+0.75rem)] top-1/2 -translate-y-1/2 whitespace-nowrap rounded-lg bg-slate-900 px-3 py-2 text-xs font-semibold text-white opacity-0 shadow-lg transition group-hover:opacity-100 group-focus-within:opacity-100">Request a quote</span>
@@ -568,205 +546,207 @@ function QuoteDialog() {
 
 function HomePage({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
   const [activeSlide, setActiveSlide] = useState(0)
+  const [carouselPaused, setCarouselPaused] = useState(false)
+  const [reducedMotion, setReducedMotion] = useState(false)
 
   useEffect(() => {
+    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const updateMotionPreference = () => setReducedMotion(motionPreference.matches)
+    updateMotionPreference()
+    motionPreference.addEventListener('change', updateMotionPreference)
+    return () => motionPreference.removeEventListener('change', updateMotionPreference)
+  }, [])
+
+  useEffect(() => {
+    if (carouselPaused || reducedMotion) return
     const timer = window.setInterval(() => {
       setActiveSlide((current) => (current + 1) % heroSlides.length)
     }, 6500)
     return () => window.clearInterval(timer)
-  }, [])
+  }, [carouselPaused, reducedMotion])
+
+  const changeSlide = (direction: -1 | 1) => {
+    setActiveSlide((current) => (current + direction + heroSlides.length) % heroSlides.length)
+  }
 
   return (
     <>
-      <section className="relative overflow-hidden bg-slate-100">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(20,184,166,0.2),_transparent_40%)]" />
-        <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-12 md:grid-cols-2 md:items-center md:py-20">
-          <div key={heroSlides[activeSlide].title} className="animate-carousel-content">
-            <Badge className="mb-4 bg-teal-100 text-teal-800">{heroSlides[activeSlide].badge}</Badge>
-            <h1 className="max-w-xl text-4xl font-black leading-tight text-slate-900 md:text-6xl">{heroSlides[activeSlide].title}</h1>
-            <p className="mt-4 max-w-lg text-lg text-slate-600">{heroSlides[activeSlide].subtitle}</p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Button onClick={() => setQuoteOpen(true)} size="lg">Request Quote</Button>
-              <a href={buildWhatsAppLink()} target="_blank" rel="noreferrer" className="inline-flex h-11 items-center justify-center rounded-md border border-primary bg-white px-6 text-sm font-medium text-primary transition hover:bg-teal-50">
-                WhatsApp Us
+      <section className="relative isolate overflow-hidden bg-deep-teal text-paper">
+        <div className="absolute inset-0 -z-10 opacity-20 [background-image:linear-gradient(90deg,transparent_49%,#f6f3ec_50%,transparent_51%)] [background-size:28px_28px]" />
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 pb-14 pt-8 md:grid-cols-[0.9fr_1.1fr] md:items-center md:gap-12 md:pb-20 md:pt-12">
+          <div
+            key={heroSlides[activeSlide].title}
+            className="animate-carousel-content"
+            onMouseEnter={() => setCarouselPaused(true)}
+            onMouseLeave={() => setCarouselPaused(false)}
+            onFocusCapture={() => setCarouselPaused(true)}
+            onBlurCapture={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setCarouselPaused(false)
+            }}
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            <p className="mb-5 text-xs font-bold uppercase tracking-[0.2em] text-teal-200">{heroSlides[activeSlide].badge}</p>
+            <h1 className="max-w-xl text-4xl font-semibold leading-[1.08] text-white sm:text-5xl md:text-6xl">{heroSlides[activeSlide].title}</h1>
+            <p className="mt-5 max-w-lg text-base leading-7 text-slate-200 sm:text-lg">{heroSlides[activeSlide].subtitle}</p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Button onClick={() => setQuoteOpen(true)} size="lg" className="bg-accent text-white hover:bg-amber-800">Get a quote</Button>
+              <a href={buildWhatsAppLink()} target="_blank" rel="noreferrer" className="inline-flex h-11 items-center justify-center rounded-md border border-white/40 px-5 text-sm font-semibold text-white transition-colors hover:bg-white/10 focus-visible:outline-white">
+                <SocialIcon type="whatsapp" /><span className="ml-2">WhatsApp our team</span>
               </a>
             </div>
-            <div className="mt-8 flex flex-wrap gap-4 text-sm text-slate-700">
-              {['Licensed Customs Agent', 'KIFWA Certified', 'Global Logistics Network'].map((item) => (
-                <span key={item} className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2"><Check className="h-4 w-4 text-primary" /> {item}</span>
-              ))}
+            <div className="mt-8 border-l-2 border-accent pl-4 text-sm leading-6 text-slate-200">
+              <p className="font-semibold text-white">Documents often requested for imports</p>
+              <p className="mt-1">IDF · Bill of Lading · Commercial Invoice · COC</p>
+              <p className="mt-1 text-xs text-slate-300">Requirements depend on cargo and current KRA guidance.</p>
             </div>
           </div>
-          <div className="relative">
-            <div className="overflow-hidden rounded-[32px] border border-slate-200 bg-white p-3 shadow-xl">
-              <div className="relative h-[260px] overflow-hidden rounded-[22px] bg-slate-100 sm:h-[340px] md:h-[420px]">
+          <div
+            className="relative"
+            onMouseEnter={() => setCarouselPaused(true)}
+            onMouseLeave={() => setCarouselPaused(false)}
+            onFocusCapture={() => setCarouselPaused(true)}
+            onBlurCapture={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setCarouselPaused(false)
+            }}
+          >
+            <div className="relative overflow-hidden border border-white/20 bg-white/5 p-2 shadow-2xl shadow-black/20">
+              <div className="relative aspect-[4/3] overflow-hidden bg-deep-teal">
                 {heroSlides.map((slide, index) => (
                   <img
                     key={slide.title}
                     src={slide.image}
                     alt={index === activeSlide ? slide.title : ''}
                     aria-hidden={index !== activeSlide}
+                    width="1200"
+                    height="900"
+                    fetchPriority={index === 0 ? 'high' : undefined}
+                    loading={index === 0 ? 'eager' : 'lazy'}
                     className={cn('absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-in-out', index === activeSlide ? 'opacity-100' : 'opacity-0')}
                   />
                 ))}
+                <div className="pointer-events-none absolute inset-0 bg-[#0f2b2c]/20" />
               </div>
             </div>
-            <div className="absolute -bottom-5 left-6 rounded-2xl bg-primary px-4 py-3 text-white shadow-lg">
-              <div className="text-2xl font-bold">24/7</div>
-              <div className="text-xs uppercase tracking-[0.25em] text-teal-100">Shipment support</div>
-            </div>
-          </div>
-        </div>
-        <div className="mx-auto flex max-w-7xl justify-center gap-3 pb-6">
-          {heroSlides.map((slide, index) => (
-            <button key={slide.title} type="button" onClick={() => setActiveSlide(index)} className={cn('h-2.5 rounded-full transition-all', activeSlide === index ? 'w-10 bg-primary' : 'w-2.5 bg-slate-300')} aria-label={`View slide ${index + 1}`} />
-          ))}
-        </div>
-      </section>
-
-      <section className="border-y border-slate-200 bg-white py-8">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="grid gap-4 md:grid-cols-4">
-            {services.slice(0, 4).map((service) => (
-              <Card key={service.slug} className="overflow-hidden border-slate-200 p-0">
-                <div className="h-36 bg-gradient-to-br from-teal-50 via-white to-slate-100 p-3">
-                  <img src={serviceImageBySlug[service.slug] ?? heroGeneralImage} alt={service.title} className="h-full w-full rounded-lg object-cover" />
-                </div>
-                <div className="p-5">
-                  <h3 className="mb-2 text-lg font-semibold text-slate-900">{service.title}</h3>
-                  <p className="mb-4 text-sm text-slate-600">{service.summary}</p>
-                  <Link to={`/services/${service.slug}`} className="text-sm font-medium text-primary">View Service</Link>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-16">
-        <SectionHeading eyebrow="Top services" title="Freight solutions built around cargo movement, compliance and time." />
-        <div className="mt-8 grid gap-6 md:grid-cols-3">
-          {homeServiceCards.map((service) => (
-            <Card key={service.title} className="overflow-hidden border-slate-200 bg-slate-50">
-              <img src={service.image} alt={service.title} className="h-52 w-full object-cover" />
-              <div className="p-5">
-                <h3 className="mb-2 text-xl font-semibold text-slate-900">{service.title}</h3>
-                <p className="mb-4 text-sm text-slate-600">{service.description}</p>
-                <button type="button" onClick={() => setQuoteOpen(true)} className="text-sm font-medium text-primary">{service.title === 'General Cargo' ? 'Get a Quote' : service.title === 'Pharmaceuticals' ? 'Speak to Expert' : 'Start Export Process'}</button>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      <section className="bg-slate-50 py-16">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 md:grid-cols-2 md:items-center">
-          <div>
-            <SectionHeading eyebrow="Who we are" title="Supporting businesses with efficient customs and road-to-door logistics." />
-            <p className="mt-4 text-slate-600">We bring together documentation, customs clearance and transport coordination to help goods move with fewer delays and less uncertainty.</p>
-            <ul className="mt-6 space-y-3 text-slate-700">
-              {['Clear goods efficiently', 'Move cargo across air, sea and road', 'Handle documentation and KRA compliance'].map((item) => (
-                <li key={item} className="inline-flex items-center gap-3"><Check className="h-5 w-5 text-primary" /> {item}</li>
-              ))}
-            </ul>
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              {['Last-mile delivery', 'Car importation', 'Warehousing', 'Consultancy'].map((item) => (
-                <div key={item} className="rounded-lg border border-slate-200 bg-white p-3 text-sm font-medium text-slate-700">{item}</div>
-              ))}
-            </div>
-            <Button className="mt-8" onClick={() => setQuoteOpen(true)}>About Us</Button>
-          </div>
-          <div>
-            <img src={heroGeneralImage} alt="Cargo logistics team" className="w-full rounded-[28px] border border-slate-200 shadow-lg" />
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-16">
-        <SectionHeading eyebrow="Clearing and forwarding" title="Core services for imports, exports and secure cargo movement." />
-        <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {services.slice(0, 6).map((service) => (
-            <Card key={service.slug} className="overflow-hidden border-slate-200 p-0">
-              <img src={serviceImageBySlug[service.slug] ?? heroGeneralImage} alt={service.title} className="h-48 w-full object-cover" />
-              <div className="p-5">
-                <h3 className="mb-2 text-xl font-semibold text-slate-900">{service.title}</h3>
-                <p className="mb-4 text-sm text-slate-600">{service.summary}</p>
-                <Link to={`/services/${service.slug}`} className="text-sm font-medium text-primary">Learn more</Link>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      <section className="bg-[#0f2b2c] py-16 text-white">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="grid gap-6 md:grid-cols-4">
-            {stats.map((stat) => (
-              <StatCounter key={stat.label} label={stat.label} value={stat.value} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-16">
-        <SectionHeading eyebrow="More logistics services" title="A wider partner network for trade and distribution." />
-        <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {moreServices.map((service) => (
-            <div key={service.title} className="rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-sm">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-teal-100 text-primary"><Truck className="h-5 w-5" /></div>
-              <h3 className="text-xl font-semibold text-slate-900">{service.title}</h3>
-              <p className="mt-2 text-sm text-slate-600">{service.subtitle}</p>
-              <Link to={`/services/${service.slug}`} className="mt-4 inline-flex items-center text-sm font-medium text-primary">View More</Link>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="bg-slate-50 py-16">
-        <div className="mx-auto max-w-7xl px-4">
-          <SectionHeading eyebrow="Why choose us" title="Clear guidance, careful handling and dependable delivery." />
-          <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {whyChooseUs.map((item, index) => (
-              <div key={item} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-teal-50 text-primary">
-                  {index === 0 ? <Globe className="h-5 w-5" /> : index === 1 ? <ShieldCheck className="h-5 w-5" /> : index === 2 ? <Warehouse className="h-5 w-5" /> : index === 3 ? <Truck className="h-5 w-5" /> : index === 4 ? <Check className="h-5 w-5" /> : <Star className="h-5 w-5" />}
-                </div>
-                <h3 className="text-lg font-semibold text-slate-900">{item}</h3>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-16">
-        <SectionHeading eyebrow="Trusted partners & global network" title="Connected with key shipping and freight partners." />
-        <div className="mt-8 grid gap-6 md:grid-cols-3">
-          {partnerGroups.map((group) => (
-            <div key={group.label} className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-              <h3 className="mb-4 text-lg font-semibold text-slate-900">{group.label}</h3>
-              <div className="grid grid-cols-2 gap-3">
-                {group.items.map((item) => (
-                  <div key={item} className="flex h-14 items-center justify-center rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-600">{item}</div>
+            <div className="mt-5 flex items-center justify-between gap-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-100">{String(activeSlide + 1).padStart(2, '0')} / {String(heroSlides.length).padStart(2, '0')}</p>
+              <div className="flex items-center gap-2">
+                <button type="button" onClick={() => changeSlide(-1)} aria-label="Previous slide" className="rounded-full border border-white/30 p-2 text-white transition hover:bg-white/10"><ChevronLeft className="h-5 w-5" /></button>
+                {heroSlides.map((slide, index) => (
+                  <button key={slide.title} type="button" onClick={() => setActiveSlide(index)} className={cn('h-2.5 rounded-full transition-all', activeSlide === index ? 'w-8 bg-accent' : 'w-2.5 bg-white/50')} aria-label={`View slide ${index + 1}`} aria-pressed={activeSlide === index} />
                 ))}
+                <button type="button" onClick={() => changeSlide(1)} aria-label="Next slide" className="rounded-full border border-white/30 p-2 text-white transition hover:bg-white/10"><ChevronRight className="h-5 w-5" /></button>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-border bg-paper py-5">
+        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">Cargo modes</p>
+          <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-700">
+            {services.slice(0, 6).map((service, index) => (
+              <Link key={service.slug} to={`/services/${service.slug}`} className="group inline-flex items-center gap-2 hover:text-primary">
+                <span className="font-mono text-xs text-accent">{String(index + 1).padStart(2, '0')}</span>{service.title}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-14 md:py-20">
+        <div className="grid gap-8 md:grid-cols-[0.65fr_1.35fr] md:items-end">
+          <SectionHeading eyebrow="Services · choose a route" title="Start with the cargo you need to move." />
+          <p className="max-w-xl text-base leading-7 text-muted-foreground">From an airway bill at JKIA to a container at Mombasa Port, we can review what is needed and explain the next steps.</p>
+        </div>
+        <div className="mt-9 grid gap-4 md:grid-cols-6 md:grid-rows-2">
+          {homeServiceCards.map((service, index) => (
+            <Link key={service.title} to={`/services/${service.slug}`} className={cn('group relative min-h-64 overflow-hidden bg-deep-teal text-white md:col-span-2', index === 0 && 'md:col-span-4 md:row-span-2 md:min-h-[33rem]')}>
+              <img src={service.image} alt={service.title} width="1200" height="800" loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
+              <div className="absolute inset-0 bg-gradient-to-t from-deep-teal/90 via-deep-teal/20 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-5 md:p-7">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-300">{String(index + 1).padStart(2, '0')} · {service.slug.replaceAll('-', ' ')}</p>
+                <h3 className="mt-2 max-w-lg font-display text-2xl font-semibold text-white md:text-3xl">{service.title}</h3>
+                <p className="mt-2 max-w-lg text-sm leading-6 text-slate-100">{service.description}</p>
+                <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-white">Service details <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></span>
+              </div>
+            </Link>
           ))}
         </div>
       </section>
 
-      <section className="bg-white py-16">
-        <div className="mx-auto max-w-7xl px-4">
-          <SectionHeading eyebrow="Licensed & certified" title="Operationally compliant for import and export work across Kenya." />
-          <p className="mt-4 max-w-2xl text-slate-600">Our team supports customs preparation, KRA process alignment and port coordination so your cargo moves with clarity and confidence.</p>
-          <div className="mt-8 grid gap-6 md:grid-cols-3">
-            {['KNCCI Membership', 'KIFWA Membership Certificate', 'Customs Clearing License'].map((label) => (
-              <button key={label} type="button" className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 text-left shadow-sm">
-                <div className="h-52 bg-gradient-to-br from-slate-200 to-teal-100 p-6">
-                  <div className="flex h-full items-center justify-center rounded-xl border border-dashed border-slate-400 bg-white/80 text-center text-sm font-medium text-slate-700">{label}</div>
-                </div>
-                <div className="p-4 text-sm text-slate-700">{label}</div>
-              </button>
+      <section className="bg-secondary py-12 md:py-16">
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 md:grid-cols-[0.8fr_1.2fr] md:items-center">
+          <div className="relative md:-mr-16 md:z-10">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">A local contact for cargo in transit</p>
+            <h2 className="mt-3 max-w-xl font-display text-3xl font-semibold leading-tight text-deep-teal md:text-5xl">A clear next step matters when a shipment is waiting.</h2>
+            <p className="mt-4 max-w-lg text-base leading-7 text-slate-700">Tested &amp; Trusted coordinates clearing and freight forwarding for importers and exporters in Kenya. Share the shipment details; we will help you identify the documents and handoffs to check.</p>
+            <Link to="/about" className="mt-6 inline-flex items-center gap-2 font-semibold text-primary">How we work <ArrowRight className="h-4 w-4" /></Link>
+          </div>
+          <div className="relative md:pl-10">
+            <img src={heroGeneralImage} alt="Cargo being handled at a shipping terminal" width="1200" height="900" loading="lazy" className="aspect-[4/3] w-full object-cover" />
+            <div className="absolute -bottom-4 right-3 max-w-xs bg-paper p-4 text-sm leading-6 text-deep-teal shadow-md md:right-0">Based in Syokimau, near Mombasa Road, Nairobi.</div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-16">
+        <div className="grid gap-8 md:grid-cols-[0.6fr_1.4fr]">
+          <div className="md:sticky md:top-28 md:self-start"><SectionHeading eyebrow="Clearance and freight" title="Documents first. Then the right handoff." /><p className="mt-4 max-w-sm leading-7 text-muted-foreground">For each shipment, the cargo type and route determine which documents to check and who needs to receive them.</p></div>
+          <div className="divide-y divide-border border-y border-border">
+            {services.slice(0, 6).map((service, index) => (
+              <Link key={service.slug} to={`/services/${service.slug}`} className="group grid gap-4 py-5 sm:grid-cols-[3.5rem_9rem_1fr_auto] sm:items-center">
+                <span className="font-mono text-sm text-accent">{String(index + 1).padStart(2, '0')}</span>
+                <img src={serviceImageBySlug[service.slug] ?? heroGeneralImage} alt="" width="320" height="220" loading="lazy" className="aspect-[4/3] w-full object-cover" />
+                <span><span className="block font-display text-xl font-semibold text-deep-teal">{service.title}</span><span className="mt-1 block max-w-lg text-sm leading-6 text-muted-foreground">{service.summary}</span></span>
+                <ArrowRight className="hidden h-5 w-5 text-primary transition-transform group-hover:translate-x-1 sm:block" />
+              </Link>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-16">
+        <SectionHeading eyebrow="More logistics services" title="Other cargo needs we can discuss." />
+          <div className="mt-8 divide-y divide-border border-y border-border">
+          {moreServices.map((service) => (
+              <Link key={service.title} to={`/services/${service.slug}`} className="group grid gap-2 py-5 transition-colors hover:bg-secondary/60 sm:grid-cols-[4rem_1fr_auto] sm:items-center sm:gap-6">
+                <span className="font-mono text-sm text-accent">{String(moreServices.indexOf(service) + 1).padStart(2, '0')}</span>
+                <span><span className="block font-display text-xl font-semibold text-deep-teal">{service.title}</span><span className="mt-1 block text-sm text-muted-foreground">{service.subtitle}</span></span>
+                <ArrowRight className="hidden h-5 w-5 text-primary transition-transform group-hover:translate-x-1 sm:block" />
+              </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="bg-secondary py-16">
+        <div className="mx-auto max-w-7xl px-4">
+          <SectionHeading eyebrow="How we help" title="Clear steps for the shipment in front of us." />
+          <div className="mt-8 grid gap-4 md:grid-cols-[0.7fr_1.3fr]">
+            <div className="bg-primary p-6 text-white"><p className="text-xs font-bold uppercase tracking-[0.18em] text-teal-100">Before the cargo moves</p><p className="mt-3 font-display text-2xl font-semibold">We start by checking the shipment details and the paperwork you already have.</p></div>
+            <ol className="divide-y divide-border border-y border-border">
+              {whyChooseUs.map((item, index) => <li key={item} className="flex items-start gap-5 py-4"><span className="font-mono text-sm text-accent">0{index + 1}</span><span className="text-base text-deep-teal">{item}</span></li>)}
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-16">
+        <div className="grid gap-8 md:grid-cols-[1fr_1.2fr] md:items-center">
+          <div><SectionHeading eyebrow="Moving cargo across borders" title="Where the handoff happens matters." /><p className="mt-4 max-w-md leading-7 text-muted-foreground">From Mombasa Port and JKIA to inland delivery, we coordinate the route and the people handling each stage.</p></div>
+          <div className="relative border-y border-border py-5 pl-10">
+            <svg aria-hidden="true" viewBox="0 0 360 150" className="absolute inset-0 h-full w-full text-primary"><path d="M38 116C102 116 102 36 178 36s79 80 144 80" fill="none" stroke="currentColor" strokeDasharray="5 5" strokeWidth="2"/><circle cx="38" cy="116" r="6" fill="currentColor"/><circle cx="178" cy="36" r="6" fill="currentColor"/><circle cx="322" cy="116" r="6" fill="currentColor"/></svg>
+            <div className="relative grid grid-cols-3 gap-3 text-center text-sm font-semibold text-deep-teal"><div className="pt-20">Mombasa Port</div><div>JKIA</div><div className="pt-20">Nairobi</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-paper py-16">
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="grid gap-8 md:grid-cols-[0.8fr_1.2fr] md:items-start">
+            <SectionHeading eyebrow="Before you engage us" title="Ask to see current credentials." />
+            <p className="max-w-2xl text-base leading-7 text-muted-foreground">Memberships and licences should be checked against current documents. We do not display unverified certificate copies or claim endorsements on this page.</p>
           </div>
         </div>
       </section>
@@ -774,14 +754,14 @@ function HomePage({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
       <section className="mx-auto max-w-7xl px-4 py-16">
         <div className="grid gap-8 rounded-[32px] border border-slate-200 bg-slate-50 p-6 md:grid-cols-2 md:p-10">
           <div>
-            <SectionHeading eyebrow="We’re here to help" title="Move cargo with less friction and clearer communication." />
-            <p className="mt-4 text-slate-600">We assist with essential logistics steps, cargo readiness, documentation and customs coordination to keep your shipment aligned with KRA expectations.</p>
+            <SectionHeading eyebrow="We’re here to help" title="Tell us what is moving." />
+            <p className="mt-4 text-slate-600">Send the origin, destination, cargo type and any documents already available. We will reply with the next details to confirm.</p>
             <ul className="mt-6 space-y-3 text-slate-700">
-              {['Logistics essentials planning', 'KRA-certified guidance'].map((item) => (
+              {['Bill of Lading or airway bill, if available', 'Commercial invoice and packing list', 'Cargo arrival date and destination'].map((item) => (
                 <li key={item} className="inline-flex items-center gap-3"><Check className="h-5 w-5 text-primary" /> {item}</li>
               ))}
             </ul>
-            <div className="mt-6 flex h-20 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-500">Brand logo placeholder</div>
+            <p className="mt-5 text-sm text-muted-foreground">{siteConfig.expectedReply}</p>
           </div>
           <div className="rounded-[24px] bg-white p-5 shadow-sm ring-1 ring-slate-200">
             <QuoteForm setQuoteOpen={setQuoteOpen} />
@@ -789,83 +769,50 @@ function HomePage({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
         </div>
       </section>
 
-      <section className="bg-slate-50 py-16">
+      <section className="bg-secondary py-12 md:py-16">
         <div className="mx-auto max-w-7xl px-4">
-          <SectionHeading eyebrow="How it works" title="A straightforward process from inquiry to final delivery." />
-          <div className="mt-8 grid gap-6 md:grid-cols-4">
-            {processSteps.map((step, index) => (
-              <div key={step} className="relative rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-lg font-bold text-white">{index + 1}</div>
-                <h3 className="text-lg font-semibold text-slate-900">{step}</h3>
-                {index < processSteps.length - 1 && <div className="hidden md:block absolute -right-3 top-1/2 h-px w-6 bg-slate-300" />}
-              </div>
-            ))}
+          <div className="grid gap-8 md:grid-cols-[0.7fr_1.3fr]">
+            <SectionHeading eyebrow="How it works" title="A short manifest for your shipment." />
+            <ol className="border-t border-border">
+              {[
+                ['Send the details', 'You provide cargo type, route, arrival date and the documents you have.'],
+                ['Review the documents', 'We identify missing information and the checks to confirm for the cargo.'],
+                ['Coordinate the handoff', 'We agree on the clearance and transport steps with you.'],
+                ['Confirm delivery', 'We keep the contact route clear through the final delivery handoff.'],
+              ].map(([step, detail], index) => (
+                <li key={step} className="grid gap-2 border-b border-border py-5 sm:grid-cols-[4rem_1fr] sm:gap-4"><span className="font-mono text-sm text-accent">0{index + 1}</span><span><span className="block font-semibold text-deep-teal">{step}</span><span className="mt-1 block max-w-2xl text-sm leading-6 text-muted-foreground">{detail}</span></span></li>
+              ))}
+            </ol>
           </div>
         </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-16">
-        <SectionHeading eyebrow="Blogs" title="Recent logistics insights and industry updates." />
+        <div className="grid gap-8 md:grid-cols-[0.7fr_1.3fr] md:items-end"><SectionHeading eyebrow="Field notes" title="Practical notes for the next shipment." /><p className="max-w-lg leading-7 text-muted-foreground">Short guides on documents, cargo modes and local clearance steps.</p></div>
         <div className="mt-8 grid gap-6 md:grid-cols-3">
           {blogPosts.slice(0, 3).map((post) => (
-            <Card key={post.slug} className="overflow-hidden border-slate-200 bg-white p-0">
-              <div className="h-44 bg-gradient-to-br from-teal-50 to-slate-100" />
-              <div className="p-5">
-                <p className="text-xs font-medium uppercase tracking-[0.2em] text-primary">{post.category}</p>
-                <h3 className="mt-3 text-xl font-semibold text-slate-900">{post.title}</h3>
-                <p className="mt-2 text-sm text-slate-600">{post.excerpt}</p>
-                <div className="mt-4 text-xs text-slate-500">{post.readTime} min read</div>
-                <Link to={`/blogs/${post.slug}`} className="mt-4 inline-flex items-center text-sm font-medium text-primary">Read more</Link>
-              </div>
-            </Card>
+            <article key={post.slug} className="border-t-2 border-primary py-5">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">{post.category} · {post.readTime} min</p>
+              <h3 className="mt-3 font-display text-2xl font-semibold leading-snug text-deep-teal">{post.title}</h3>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground">{post.excerpt}</p>
+              <Link to={`/blogs/${post.slug}`} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary">Read the note <ArrowRight className="h-4 w-4" /></Link>
+            </article>
           ))}
         </div>
       </section>
 
-      <section className="bg-slate-100 py-16">
-        <div className="mx-auto max-w-7xl px-4">
-          <SectionHeading eyebrow="Testimonials" title="Clients trust us to manage critical cargo and customs steps." />
-          <div className="mt-8 grid gap-6 md:grid-cols-3">
-            {testimonials.slice(0, 3).map((item) => (
-              <Card key={item.name} className="border-slate-200 bg-white p-5">
-                <div className="mb-4 flex text-amber-400">
-                  {Array.from({ length: 5 }).map((_, index) => <Star key={index} className="h-4 w-4 fill-current" />)}
-                </div>
-                <p className="text-slate-700">“{item.quote}”</p>
-                <div className="mt-4 border-t border-slate-200 pt-4">
-                  <div className="font-semibold text-slate-900">{item.name}</div>
-                  <div className="text-sm text-slate-500">{item.role}</div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-primary py-14 text-white">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 md:flex-row">
-          <div>
-            <div className="text-sm uppercase tracking-[0.2em] text-teal-100">Need a quote?</div>
-            <h2 className="mt-2 text-3xl font-bold">Get a Free Quote</h2>
-          </div>
-          <div className="flex gap-3">
-            <Button variant="secondary" onClick={() => setQuoteOpen(true)}>Request Quote</Button>
-            <a href={buildWhatsAppLink()} target="_blank" rel="noreferrer" className="inline-flex h-10 items-center justify-center rounded-md border border-white/30 bg-white/10 px-4 text-sm font-medium text-white transition hover:bg-white/20">WhatsApp Us</a>
-          </div>
+      <section className="bg-paper py-10 md:py-14">
+        <div className="mx-auto grid max-w-7xl gap-6 px-4 md:grid-cols-[0.7fr_1.3fr] md:items-center">
+          <div><p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">For importers and exporters</p><h2 className="mt-3 font-display text-3xl font-semibold leading-tight text-deep-teal">A document question? Start here.</h2></div>
+          <div className="flex flex-wrap gap-3 md:justify-end"><Button onClick={() => setQuoteOpen(true)} className="bg-accent text-white hover:bg-amber-800">Ask about your shipment</Button><a href={buildWhatsAppLink()} target="_blank" rel="noreferrer" className="inline-flex h-10 items-center gap-2 border border-primary px-4 text-sm font-semibold text-primary"><SocialIcon type="whatsapp" /> WhatsApp us</a></div>
         </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-16">
-        <div className="rounded-[32px] border border-slate-200 bg-slate-50 p-6 md:p-10">
-          <SectionHeading eyebrow="Location" title="Visit or talk to our logistics team." />
-          <div className="mt-8 grid gap-6 md:grid-cols-[1.1fr_1.4fr]">
-            <div className="space-y-4 text-slate-700">
-              <div className="flex items-start gap-3"><MapPin className="mt-1 h-5 w-5 text-primary" /> {siteConfig.address}</div>
-              <div className="flex items-start gap-3"><Clock3 className="mt-1 h-5 w-5 text-primary" /> {siteConfig.hours}</div>
-              <div className="flex items-start gap-3"><Phone className="mt-1 h-5 w-5 text-primary" /> {siteConfig.phone}</div>
-              <div className="flex items-start gap-3"><Mail className="mt-1 h-5 w-5 text-primary" /> {siteConfig.email}</div>
-            </div>
-            <iframe title="Map" src={siteConfig.mapUrl} loading="lazy" className="h-[320px] w-full rounded-2xl border border-slate-200" />
+        <div className="border-t-2 border-primary bg-secondary p-5 md:p-9">
+          <div className="grid gap-8 md:grid-cols-[0.75fr_1.25fr]">
+            <div><SectionHeading eyebrow="Syokimau · Mombasa Road" title="Find our Nairobi office." /><div className="mt-6 space-y-4 text-sm leading-6 text-slate-700"><OpenNowIndicator /><div className="flex items-start gap-3"><MapPin className="mt-1 h-5 w-5 text-primary" /> {siteConfig.address}</div><p className="text-xs text-muted-foreground">{siteConfig.hours}</p></div></div>
+            <div><iframe title="Map to Tested & Trusted office" src={siteConfig.mapUrl} loading="lazy" className="h-[320px] w-full border border-border" /><div className="mt-4 flex flex-wrap gap-4 text-sm font-semibold"><a href={`tel:${siteConfig.phoneHref}`} className="text-primary">Call {siteConfig.phone}</a><a href={`mailto:${siteConfig.email}`} className="text-primary">Email {siteConfig.email}</a></div></div>
           </div>
         </div>
       </section>
@@ -879,24 +826,18 @@ function AboutPage({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) 
       <SectionHeading eyebrow="About us" title="A dedicated clearing and forwarding team for Kenya-bound cargo." />
       <div className="mt-8 grid gap-8 md:grid-cols-2">
         <div>
-          <p className="text-lg text-slate-600">We support importers, exporters and commercial clients with practical cargo coordination, customs readiness and a strong regional network.</p>
-          <p className="mt-4 text-slate-600">From airport clearance to final delivery, our team works to reduce delays, simplify documentation and keep cargo moving with confidence.</p>
+          <p className="text-lg leading-7 text-slate-700">Tested &amp; Trusted provides clearing and freight forwarding support from Nairobi. We work with people importing goods, exporting produce, and arranging cargo transport.</p>
+          <p className="mt-4 leading-7 text-slate-600">Share the cargo type, route, arrival date and paperwork you have. We will help identify the next documents or handoffs to check.</p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Button onClick={() => setQuoteOpen(true)}>Request Quote</Button>
+            <Button onClick={() => setQuoteOpen(true)}>Ask about a shipment</Button>
             <Link to="/services" className="inline-flex h-10 items-center justify-center rounded-md border border-slate-200 px-4 text-sm font-medium text-slate-800 hover:bg-slate-100">View Services</Link>
           </div>
         </div>
-        <img src={heroGeneralImage} alt="Freight company team" className="w-full rounded-[28px]" />
+        <img src={heroGeneralImage} alt="Cargo containers at a shipping terminal" width="1200" height="900" loading="lazy" className="aspect-[4/3] w-full object-cover" />
       </div>
-      <div className="mt-12 grid gap-6 md:grid-cols-3">
-        {['Strong customs coordination', 'Responsive communication', 'Regional logistics network'].map((item) => (
-          <div key={item} className="rounded-2xl border border-slate-200 bg-slate-50 p-6">{item}</div>
-        ))}
-      </div>
-      <div className="mt-12 grid gap-6 md:grid-cols-4">
-        {stats.map((stat) => (
-          <StatCounter key={stat.label} label={stat.label} value={stat.value} />
-        ))}
+      <div className="mt-12 grid gap-8 border-y border-border py-8 md:grid-cols-[0.7fr_1.3fr]">
+        <h2 className="font-display text-2xl font-semibold text-deep-teal">What we ask for first</h2>
+        <ul className="grid gap-3 text-sm text-slate-700 sm:grid-cols-2"><li>IDF and commercial invoice, where applicable</li><li>Bill of Lading or airway bill</li><li>Origin, destination and cargo description</li><li>Expected arrival date and contact details</li></ul>
       </div>
     </div>
   )
@@ -905,28 +846,14 @@ function AboutPage({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) 
 function ServicesPage({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
   return (
     <div className="mx-auto max-w-7xl px-4 py-16">
-      <SectionHeading eyebrow="Services" title="Cargo and customs solutions across the full logistics chain." />
-      <div className="mt-8 space-y-10">
-        {['Global to Kenya', 'Clearing & Forwarding', 'General', 'Cargo Transportation'].map((category) => (
-          <div key={category}>
-            <h2 className="mb-4 text-2xl font-bold text-slate-900">{category}</h2>
-            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-              {services.filter((service) => service.category === category || (category === 'Global to Kenya' && xToKenyaServices.includes(service.title))).map((service) => (
-                <Card key={service.slug} className="overflow-hidden border-slate-200 p-0">
-                  <img src={serviceImageBySlug[service.slug] ?? heroGeneralImage} alt={service.title} className="h-48 w-full object-cover" />
-                  <div className="p-5">
-                    <h3 className="text-xl font-semibold text-slate-900">{service.title}</h3>
-                    <p className="mt-2 text-sm text-slate-600">{service.summary}</p>
-                    <div className="mt-4 flex items-center gap-3">
-                      <Link to={`/services/${service.slug}`} className="text-sm font-medium text-primary">Learn more</Link>
-                      <button type="button" onClick={() => setQuoteOpen(true)} className="text-sm font-medium text-primary">Request quote</button>
-                    </div>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </div>
-        ))}
+      <div className="grid gap-8 md:grid-cols-[0.65fr_1.35fr]">
+        <div className="md:sticky md:top-28 md:self-start"><SectionHeading eyebrow="Services" title="What are you moving?" /><p className="mt-4 leading-7 text-muted-foreground">Choose a cargo mode or service. We can review your route and the documents you have.</p><Button className="mt-5" onClick={() => setQuoteOpen(true)}>Ask about your cargo</Button></div>
+        <div className="divide-y divide-border border-y border-border">
+          {['Clearing & Forwarding', 'General', 'Cargo Transportation'].map((category) => {
+            const categoryServices = services.filter((service) => service.category === category)
+            return <section key={category} className="py-5"><h2 className="font-display text-xl font-semibold text-deep-teal">{category}</h2><ul className="mt-3 grid gap-x-6 sm:grid-cols-2">{categoryServices.map((service) => <li key={service.slug}><Link to={`/services/${service.slug}`} className="group flex items-start justify-between gap-3 border-t border-border/70 py-3"><span><span className="block font-semibold text-deep-teal">{service.title}</span><span className="mt-1 block text-sm leading-5 text-muted-foreground">{service.summary}</span></span><ArrowRight className="mt-1 h-4 w-4 shrink-0 text-primary transition-transform group-hover:translate-x-1" /></Link></li>)}</ul></section>
+          })}
+        </div>
       </div>
     </div>
   )
@@ -1008,23 +935,23 @@ function ServiceDetailPage({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => 
 function PartnershipsPage({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
   return (
     <div className="mx-auto max-w-7xl px-4 py-16">
-      <SectionHeading eyebrow="Partnerships" title="We collaborate with freight, warehousing and trade partners." />
+      <SectionHeading eyebrow="Cargo handoffs" title="A shipment passes through several teams." />
+      <p className="mt-4 max-w-2xl leading-7 text-muted-foreground">For each route, we coordinate with the relevant carrier, terminal, warehouse and delivery contacts. This list describes the kinds of teams involved; it is not a list of endorsements or named commercial agreements.</p>
       <div className="mt-8 grid gap-6 md:grid-cols-3">
         {partnerGroups.map((group) => (
-          <div key={group.label} className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
-            <h3 className="text-xl font-semibold text-slate-900">{group.label}</h3>
-            <div className="mt-5 space-y-3">
+          <div key={group.label} className="border-t-2 border-primary bg-secondary/60 p-6">
+            <h3 className="font-display text-xl font-semibold text-deep-teal">{group.label}</h3>
+            <ul className="mt-5 divide-y divide-border">
               {group.items.map((item) => (
-                <div key={item} className="rounded-lg border border-slate-200 bg-white p-3 text-sm text-slate-700">{item}</div>
+                <li key={item} className="py-3 text-sm text-slate-700">{item}</li>
               ))}
-            </div>
+            </ul>
           </div>
         ))}
       </div>
-      <div className="mt-12 rounded-[32px] bg-primary px-6 py-10 text-white md:px-10">
-        <h3 className="text-3xl font-bold">Become a partner</h3>
-        <p className="mt-3 max-w-xl text-teal-50">We welcome shipping lines, carriers, warehousing operators and trade organisations who value reliable coordination.</p>
-        <Button className="mt-6 bg-white text-primary hover:bg-slate-100" onClick={() => setQuoteOpen(true)}>Start a Partnership</Button>
+      <div className="mt-12 grid gap-6 border-y border-border py-8 md:grid-cols-[1fr_auto] md:items-center">
+        <div><h3 className="font-display text-2xl font-semibold text-deep-teal">Work with us on a cargo movement</h3><p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">Share your service area and contact details so we can discuss whether the route needs your support.</p></div>
+        <Button className="bg-accent text-white hover:bg-amber-800" onClick={() => setQuoteOpen(true)}>Contact our team</Button>
       </div>
     </div>
   )
@@ -1069,12 +996,10 @@ function BlogDetailPage() {
         <div className="text-xs font-medium uppercase tracking-[0.2em] text-primary">{post.category}</div>
         <h1 className="mt-3 text-4xl font-black text-slate-900">{post.title}</h1>
         <div className="mt-3 text-sm text-slate-500">{post.date} · {post.readTime} min read</div>
-        <div className="mt-8 h-60 rounded-2xl bg-gradient-to-br from-teal-50 via-white to-slate-100" />
+        <img src={heroGeneralImage} alt="Shipping containers at a freight terminal" width="1200" height="900" loading="lazy" className="mt-8 aspect-[16/8] w-full object-cover" />
         <p className="mt-8 text-lg text-slate-600">{post.excerpt}</p>
         <div className="mt-8 space-y-4 text-slate-700">
-          <p>Efficient logistics planning begins with accurate cargo information and clear communication between stakeholders. Importers, exporters and freight partners all need consistent visibility to keep goods moving on schedule.</p>
-          <p>That is why coordinating document readiness, customs planning and final-mile transport is critical. A good logistics partner reduces friction at the port, at the terminal and on the final route.</p>
-          <p>When businesses align their import or export workflow with the right team, they can reduce delays, improve compliance and move cargo with more confidence.</p>
+          {post.body.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
         </div>
       </div>
       <div className="mt-10">
@@ -1130,9 +1055,10 @@ function TermsPage() {
 function NotFoundPage() {
   return (
     <div className="mx-auto max-w-xl px-4 py-24 text-center">
-      <h1 className="text-5xl font-black text-slate-900">404</h1>
-      <p className="mt-4 text-xl text-slate-600">The page you are looking for does not exist.</p>
-      <Link to="/" className="mt-6 inline-flex items-center justify-center rounded-md bg-primary px-5 py-3 text-white">Back home</Link>
+      <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">Wrong turn</p>
+      <h1 className="mt-3 font-display text-5xl font-semibold text-deep-teal">404</h1>
+      <p className="mt-4 text-lg text-muted-foreground">That page is not on this route. Your shipment is easier to find than this link.</p>
+      <Link to="/" className="mt-6 inline-flex items-center justify-center rounded-md bg-primary px-5 py-3 font-semibold text-white">Back to the home page</Link>
     </div>
   )
 }
@@ -1154,13 +1080,10 @@ function QuoteForm({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) 
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = form
 
   const onSubmit = async (values: QuoteFormValues) => {
-    if (values.companyHidden) {
-      return
-    }
-
+    if (values.companyHidden) return
     try {
       await submitQuote(values)
-      toast.success('Your quote request has been received.')
+      toast.success('Got it. We will reply by WhatsApp or email shortly.')
       reset()
       setQuoteOpen(false)
     } catch (error) {
@@ -1170,73 +1093,23 @@ function QuoteForm({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) 
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+      <div className="mb-5"><h2 className="font-display text-2xl font-semibold text-deep-teal">Tell us about the cargo</h2><p className="mt-1 text-sm text-muted-foreground">{siteConfig.expectedReply}</p></div>
       <div className="grid gap-4 md:grid-cols-2">
-        <div>
-          <Label htmlFor="quote-name">Full name *</Label>
-          <Input id="quote-name" className="mt-2" {...register('fullName')} />
-          {errors.fullName && <p className="mt-1 text-sm text-red-600">{errors.fullName.message}</p>}
-        </div>
-        <div>
-          <Label htmlFor="quote-email">Email *</Label>
-          <Input id="quote-email" type="email" className="mt-2" {...register('email')} />
-          {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>}
-        </div>
-        <div>
-          <Label htmlFor="quote-phone">Phone *</Label>
-          <Input id="quote-phone" type="tel" className="mt-2" {...register('phone')} />
-          {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>}
-        </div>
-        <div>
-          <Label htmlFor="quote-country">Country *</Label>
-          <select id="quote-country" className="mt-2 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" {...register('country')}>
-            {countries.map((country) => (
-              <option key={country} value={country}>{country}</option>
-            ))}
-          </select>
-          {errors.country && <p className="mt-1 text-sm text-red-600">{errors.country.message}</p>}
-        </div>
+        <div><Label htmlFor="quote-name">Full name *</Label><Input id="quote-name" className="mt-2" placeholder="Your name" aria-invalid={Boolean(errors.fullName)} aria-describedby={errors.fullName ? 'quote-name-error' : undefined} {...register('fullName')} />{errors.fullName && <p id="quote-name-error" className="mt-1 text-sm text-red-600">{errors.fullName.message}</p>}</div>
+        <div><Label htmlFor="quote-email">Email *</Label><Input id="quote-email" type="email" className="mt-2" placeholder="you@example.com" aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? 'quote-email-error' : undefined} {...register('email')} />{errors.email && <p id="quote-email-error" className="mt-1 text-sm text-red-600">{errors.email.message}</p>}</div>
+        <div><Label htmlFor="quote-phone">Phone *</Label><Input id="quote-phone" type="tel" className="mt-2" placeholder="+254…" aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? 'quote-phone-error' : undefined} {...register('phone')} />{errors.phone && <p id="quote-phone-error" className="mt-1 text-sm text-red-600">{errors.phone.message}</p>}</div>
+        <div><Label htmlFor="quote-country">Country *</Label><select id="quote-country" className="mt-2 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" {...register('country')}>{countries.map((country) => <option key={country} value={country}>{country}</option>)}</select>{errors.country && <p className="mt-1 text-sm text-red-600">{errors.country.message}</p>}</div>
       </div>
-      <div>
-        <Label htmlFor="quote-service">Service *</Label>
-        <select id="quote-service" className="mt-2 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" {...register('service')}>
-          {quoteOptions.map((option) => (
-            <option key={option} value={option}>{option}</option>
-          ))}
-        </select>
-        {errors.service && <p className="mt-1 text-sm text-red-600">{errors.service.message}</p>}
-      </div>
-      <div>
-        <Label htmlFor="quote-message">Message</Label>
-        <Textarea id="quote-message" className="mt-2" {...register('message')} />
-      </div>
-      <div className="hidden">
-        <Input {...register('companyHidden')} />
-      </div>
-      <Button type="submit" disabled={isSubmitting} className="w-full">{isSubmitting ? 'Sending...' : 'Submit Request'}</Button>
+      <div><Label htmlFor="quote-service">Service *</Label><select id="quote-service" className="mt-2 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" {...register('service')}>{quoteOptions.map((option) => <option key={option} value={option}>{option}</option>)}</select>{errors.service && <p className="mt-1 text-sm text-red-600">{errors.service.message}</p>}</div>
+      <div><Label htmlFor="quote-message">Shipment details</Label><Textarea id="quote-message" className="mt-2" placeholder="Origin, destination, cargo type, arrival date, or documents available" {...register('message')} /></div>
+      <div className="hidden"><Input {...register('companyHidden')} /></div>
+      <Button type="submit" disabled={isSubmitting} className="w-full">{isSubmitting ? 'Sending…' : 'Send shipment details'}</Button>
     </form>
   )
 }
 
 function SectionHeading({ eyebrow, title }: { eyebrow: string; title: string }) {
-  return (
-    <div>
-      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">{eyebrow}</p>
-      <h2 className="mt-2 max-w-2xl text-3xl font-black text-slate-900 md:text-4xl">{title}</h2>
-    </div>
-  )
-}
-
-function StatCounter({ label, value }: { label: string; value: string }) {
-  const [visible] = useState(true)
-
-  const { value: currentValue } = useCountUp(Number.parseInt(value, 10) || 0, 1200, visible)
-
-  return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-5 text-center">
-      <div className="text-4xl font-black text-white">{value.includes('+') ? `${currentValue}+` : currentValue}</div>
-      <div className="mt-2 text-sm uppercase tracking-[0.18em] text-slate-200">{label}</div>
-    </div>
-  )
+  return <div><p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">{eyebrow}</p><h2 className="mt-2 max-w-2xl font-display text-3xl font-semibold text-deep-teal md:text-4xl">{title}</h2></div>
 }
 
 export default App
