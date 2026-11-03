@@ -224,7 +224,6 @@ function App() {
 
 function SiteShell() {
   const [showBackToTop, setShowBackToTop] = useState(false)
-  const [showNavigation, setShowNavigation] = useState(false)
   const { setOpen } = useQuoteDialog()
   const location = useLocation()
 
@@ -232,7 +231,6 @@ function SiteShell() {
     const onScroll = () => {
       const scrollPosition = window.scrollY
       setShowBackToTop(scrollPosition > 300)
-      setShowNavigation(scrollPosition > 80)
     }
     window.addEventListener('scroll', onScroll)
     onScroll()
@@ -246,7 +244,7 @@ function SiteShell() {
   return (
     <div className="bg-background text-foreground min-h-screen">
       <Topbar />
-      <Header setQuoteOpen={setOpen} visible={showNavigation} />
+      <Header setQuoteOpen={setOpen} />
       <main>
         <Routes>
           <Route path="/" element={<HomePage setQuoteOpen={setOpen} />} />
@@ -404,24 +402,11 @@ function SocialIcon({ type }: { type: string }) {
   }
 }
 
-function Header({
-  setQuoteOpen,
-  visible,
-}: {
-  setQuoteOpen: (open: boolean) => void
-  visible: boolean
-}) {
+function Header({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
-    <header
-      className={cn(
-        'fixed inset-x-0 top-0 z-40 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur transition duration-300 ease-out',
-        visible
-          ? 'translate-y-0 opacity-100'
-          : 'pointer-events-none -translate-y-full opacity-0',
-      )}
-    >
+    <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4">
         <Link to="/" className="order-2 flex min-w-0 items-center lg:order-1">
           <Logo className="h-12 w-56 sm:h-14 sm:w-64" />
