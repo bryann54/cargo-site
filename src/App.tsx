@@ -288,7 +288,7 @@ function SiteShell() {
 
 function Topbar() {
   return (
-    <div className="bg-deep-teal hidden border-b border-white/10 text-sm text-slate-200 md:block">
+    <div className="dark-surface bg-deep-teal hidden border-b border-white/10 text-sm text-slate-200 md:block">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2">
         <div className="flex items-center gap-4">
           {siteConfig.socials.map((social) => (
@@ -622,7 +622,7 @@ function FooterInner({
   const currentYear = CURRENT_YEAR
 
   return (
-    <footer className="bg-deep-teal text-slate-200">
+    <footer className="dark-surface bg-deep-teal text-slate-200">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 md:grid-cols-2 xl:grid-cols-4">
         <div>
           <div className="mb-4 flex items-center gap-3">
@@ -741,7 +741,7 @@ function FloatingActions({
             target="_blank"
             rel="noreferrer"
             aria-label="Chat with us on WhatsApp"
-            className="flex h-14 w-14 items-center justify-center rounded-full bg-[#25d366] text-white shadow-lg ring-4 shadow-green-900/20 ring-white transition duration-200 hover:scale-105 hover:bg-[#1db954] focus-visible:ring-4 focus-visible:ring-green-200 focus-visible:outline-none"
+            className="flex h-14 w-14 items-center justify-center rounded-full bg-whatsapp text-white shadow-lg ring-4 shadow-green-900/20 ring-white transition duration-200 hover:scale-105 hover:bg-whatsapp-hover focus-visible:ring-4 focus-visible:ring-green-200 focus-visible:outline-none"
           >
             <SocialIcon type="whatsapp" />
           </a>
@@ -961,8 +961,8 @@ function HomePage({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
 
   return (
     <>
-      <section className="bg-deep-teal text-paper relative isolate overflow-hidden">
-        <div className="absolute inset-0 -z-10 [background-image:linear-gradient(90deg,transparent_49%,#f6f3ec_50%,transparent_51%)] [background-size:28px_28px] opacity-20" />
+      <section className="dark-surface bg-deep-teal text-paper relative isolate overflow-hidden">
+        <div className="manifest-grid absolute inset-0 -z-10 opacity-20" />
         <div className="mx-auto grid max-w-7xl gap-8 px-4 pt-8 pb-14 md:grid-cols-[0.9fr_1.1fr] md:items-center md:gap-12 md:pt-12 md:pb-20">
           <div
             key={heroSlides[activeSlide].title}
@@ -994,7 +994,7 @@ function HomePage({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
               <Button
                 onClick={() => setQuoteOpen(true)}
                 size="lg"
-                className="bg-accent text-white hover:bg-amber-800"
+                className="bg-amber-strong text-white hover:brightness-90"
               >
                 Get a quote
               </Button>
@@ -1052,7 +1052,7 @@ function HomePage({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
                     )}
                   />
                 ))}
-                <div className="pointer-events-none absolute inset-0 bg-[#0f2b2c]/20" />
+                <div className="bg-surface-overlay pointer-events-none absolute inset-0" />
               </div>
             </div>
             <div className="mt-5 flex items-center justify-between gap-4">
@@ -1110,7 +1110,7 @@ function HomePage({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
                 to={`/services/${service.slug}`}
                 className="group hover:text-primary inline-flex items-center gap-2"
               >
-                <span className="text-accent font-mono text-xs">
+                <span className="text-amber-strong font-mono text-xs">
                   {String(index + 1).padStart(2, '0')}
                 </span>
                 {service.title}
@@ -1151,7 +1151,7 @@ function HomePage({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
               />
               <div className="from-deep-teal/90 via-deep-teal/20 absolute inset-0 bg-gradient-to-t to-transparent" />
               <div className="absolute inset-x-0 bottom-0 p-5 md:p-7">
-                <p className="text-xs font-bold tracking-[0.18em] text-amber-300 uppercase">
+                <p className="text-xs font-bold tracking-[0.18em] text-white uppercase">
                   {String(index + 1).padStart(2, '0')} ·{' '}
                   {service.slug.replaceAll('-', ' ')}
                 </p>
@@ -1227,7 +1227,7 @@ function HomePage({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
                 to={`/services/${service.slug}`}
                 className="group grid gap-4 py-5 sm:grid-cols-[3.5rem_9rem_1fr_auto] sm:items-center"
               >
-                <span className="text-accent font-mono text-sm">
+                <span className="text-amber-strong font-mono text-sm">
                   {String(index + 1).padStart(2, '0')}
                 </span>
                 <img
@@ -1265,7 +1265,7 @@ function HomePage({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
               to={`/services/${service.slug}`}
               className="group hover:bg-secondary/60 grid gap-2 py-5 transition-colors sm:grid-cols-[4rem_1fr_auto] sm:items-center sm:gap-6"
             >
-              <span className="text-accent font-mono text-sm">
+              <span className="text-amber-strong font-mono text-sm">
                 {String(moreServices.indexOf(service) + 1).padStart(2, '0')}
               </span>
               <span>
@@ -1301,7 +1301,7 @@ function HomePage({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
             <ol className="divide-border border-border divide-y border-y">
               {whyChooseUs.map((item, index) => (
                 <li key={item} className="flex items-start gap-5 py-4">
-                  <span className="text-accent font-mono text-sm">
+                  <span className="text-amber-strong font-mono text-sm">
                     0{index + 1}
                   </span>
                   <span className="text-deep-teal text-base">{item}</span>
@@ -1428,7 +1428,7 @@ function HomePage({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
                   key={step}
                   className="border-border grid gap-2 border-b py-5 sm:grid-cols-[4rem_1fr] sm:gap-4"
                 >
-                  <span className="text-accent font-mono text-sm">
+                  <span className="text-amber-strong font-mono text-sm">
                     0{index + 1}
                   </span>
                   <span>
@@ -1492,7 +1492,7 @@ function HomePage({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
           <div className="flex flex-wrap gap-3 md:justify-end">
             <Button
               onClick={() => setQuoteOpen(true)}
-              className="bg-accent text-white hover:bg-amber-800"
+              className="bg-amber-strong text-white hover:brightness-90"
             >
               Ask about your shipment
             </Button>
@@ -1835,7 +1835,7 @@ function PartnershipsPage({
           </p>
         </div>
         <Button
-          className="bg-accent text-white hover:bg-amber-800"
+          className="bg-amber-strong text-white hover:brightness-90"
           onClick={() => setQuoteOpen(true)}
         >
           Contact our team

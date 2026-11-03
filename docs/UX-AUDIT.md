@@ -30,3 +30,19 @@
 ## Evidence and follow-up
 
 The baseline captures cover all current routes at the three requested widths: `/`, `/about`, `/services`, `/services/air-freight`, `/partnerships`, `/blogs`, `/blogs/import-clearing-kenya`, `/contact`, `/terms`, and an unknown-route 404. Keep screenshots temporary; do not add them to Git. Re-capture the same matrix after implementation and record remaining real-content dependencies here.
+
+## Contract token contrast review
+
+Contrast ratios below use WCAG relative luminance and are rounded to two decimals. The palette's normal-text pairs meet AA (4.5:1):
+
+| Foreground | Background | Contrast |
+|---|---|---:|
+| Amber text `#b45309` | Paper `#f6f3ec` | 4.53:1 |
+| White text `#ffffff` | Amber button `#b45309` | 5.02:1 |
+| Primary teal `#0f766e` | White `#ffffff` | 5.47:1 |
+| Primary teal `#0f766e` | Paper `#f6f3ec` | 4.94:1 |
+| Deep teal `#0f2b2c` | Paper `#f6f3ec` | 13.51:1 |
+| Deep teal `#0f2b2c` | Teal tint `#e2efea` | 12.67:1 |
+| Text `#172321` | Paper `#f6f3ec` | 14.59:1 |
+
+These are palette-level ratios, not a substitute for checking each final composited state, image overlay, or disabled control.

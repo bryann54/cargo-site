@@ -17,10 +17,18 @@
   --border: #d8d4ca;
   --input: #d8d4ca;
   --ring: #0f766e;
+  --accent: #e2efea;
+  --accent-foreground: #0f2b2c;
+  --popover: #ffffff;
+  --popover-foreground: #172321;
   --destructive: #ef4444;
-  --accent: #d97706;
+  --amber: #b45309;
   --deep-teal: #0f2b2c;
   --paper: #f6f3ec;
+  --whatsapp: #25d366;
+  --whatsapp-hover: #1db954;
+  --teal-hover: #174342;
+  --surface-overlay: rgb(15 43 44 / 20%);
   --radius: 1rem;
 }
 
@@ -38,11 +46,18 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-destructive: var(--destructive);
   --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-amber: var(--amber);
+  --color-destructive: var(--destructive);
   --color-deep-teal: var(--deep-teal);
   --color-paper: var(--paper);
-  --radius: var(--radius);
+  --color-whatsapp: var(--whatsapp);
+  --color-whatsapp-hover: var(--whatsapp-hover);
+  --color-teal-hover: var(--teal-hover);
+  --color-surface-overlay: var(--surface-overlay);
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
 
@@ -95,6 +110,36 @@ body {
 
 .animate-carousel-content {
   animation: carousel-content-in 650ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.manifest-grid {
+  background-image: linear-gradient(
+    90deg,
+    transparent 49%,
+    var(--paper) 50%,
+    transparent 51%
+  );
+  background-size: 28px 28px;
+}
+
+.text-amber-strong {
+  color: var(--amber);
+}
+
+.bg-amber-strong {
+  background-color: var(--amber);
+}
+
+.bg-whatsapp {
+  background-color: var(--whatsapp);
+}
+
+.hover\:bg-whatsapp-hover:hover {
+  background-color: var(--whatsapp-hover);
+}
+
+.dark-surface :focus-visible {
+  outline-color: var(--paper);
 }
 
 img {
