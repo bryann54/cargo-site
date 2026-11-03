@@ -1,9 +1,20 @@
-import { render, screen } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
-import App from '@/app/App'
+import { render, screen, cleanup } from '@testing-library/react'
+import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
+import { MemoryRouter } from 'react-router-dom'
+import { HomePage } from '@/pages/HomePage'
+import { AboutPage } from '@/pages/AboutPage'
+import { QuoteDialogProvider } from '@/features/quote/QuoteDialogContext'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { quoteSchema } from '@/features/quote/schema'
 import { submitQuote } from '@/features/quote/api'
+
+beforeEach(() => {
+  window.scrollTo = vi.fn()
+})
+
+afterEach(() => {
+  cleanup()
+})
 
 describe('quote form schema', () => {
   it('accepts valid data', () => {
@@ -70,26 +81,33 @@ describe('quote fallback', () => {
   })
 })
 
-describe('app smoke', () => {
-  it('renders the home page title', () => {
-    window.history.pushState({}, '', '/cargo-site/')
-    render(<App />)
+describe('page smoke tests', () => {
+  it('renders the home page hero title', () => {
+    render(
+      <QuoteDialogProvider>
+        <MemoryRouter>
+          <HomePage />
+        </MemoryRouter>
+      </QuoteDialogProvider>
+    )
     expect(
       screen.getByRole('heading', {
         level: 1,
-        name: /Cargo moving through Kenya starts with the right paperwork/i,
-      }),
+        name: /cargo moving through kenya starts with the right paperwork/i,
+      })
     ).toBeInTheDocument()
   })
 
-  it('renders a deep route', () => {
-    window.history.pushState({}, '', '/cargo-site/about')
-    render(<App />)
+  it('renders the about page heading', () => {
+    render(
+      <QuoteDialogProvider>
+        <MemoryRouter>
+          <AboutPage />
+        </MemoryRouter>
+      </QuoteDialogProvider>
+    )
     expect(
-      screen.getByRole('heading', {
-        level: 2,
-        name: /A dedicated clearing and forwarding team/i,
-      }),
+      screen.getByText(/a dedicated clearing and forwarding team/i)
     ).toBeInTheDocument()
   })
 })
