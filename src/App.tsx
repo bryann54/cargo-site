@@ -74,6 +74,14 @@ import serviceRailImage from '@/assets/service-rail.jpg'
 import serviceWarehousingImage from '@/assets/service-warehousing.jpg'
 import { Logo } from '@/components/common/Logo'
 import { OpenNowIndicator } from '@/components/common/OpenNowIndicator'
+import {
+  heroSlides,
+  homeServiceCards,
+  moreServices,
+  quoteOptions,
+  shippingSteps,
+  whyChooseUs,
+} from '@/data/home'
 
 const serviceImageBySlug: Record<string, string> = {
   'air-freight': heroAirImage,
@@ -89,116 +97,6 @@ const serviceImageBySlug: Record<string, string> = {
   'road-cargo-transportation': heroRoadImage,
   'rail-cargo-transportation': serviceRailImage,
 }
-
-const heroSlides = [
-  {
-    title: 'Cargo moving through Kenya starts with the right paperwork.',
-    subtitle:
-      'We help importers prepare documents, coordinate customs clearance and plan transport through JKIA and Mombasa Port.',
-    badge: 'JKIA · Mombasa Port · Nairobi',
-    image: heroGeneralImage,
-  },
-  {
-    title: 'Air cargo, with the arrival details checked first.',
-    subtitle:
-      'Share your airway bill and invoice so the clearance steps can be reviewed before collection.',
-    badge: 'Air freight · JKIA',
-    image: heroAirImage,
-  },
-  {
-    title: 'Sea freight from port release to the next leg.',
-    subtitle:
-      'We coordinate clearance documents and onward movement for shipments arriving through Mombasa Port.',
-    badge: 'Sea freight · Mombasa',
-    image: heroSeaImage,
-  },
-  {
-    title: 'Road freight planned around the route and the load.',
-    subtitle:
-      'Tell us where the cargo starts, where it is going and what needs to travel with it.',
-    badge: 'Road freight · East Africa',
-    image: heroRoadImage,
-  },
-]
-
-const whyChooseUs = [
-  'Check documents before cargo arrives',
-  'Coordinate with the relevant port or airport team',
-  'Share the next step when a document is missing',
-  'Arrange onward transport when clearance is complete',
-]
-
-const homeServiceCards = [
-  {
-    title: 'General Cargo',
-    description:
-      'For goods moving by air, sea or road. Start with the route and cargo details.',
-    slug: 'general-cargo',
-    image: serviceGeneralCargoImage,
-  },
-  {
-    title: 'Pharmaceuticals',
-    description:
-      'Temperature-sensitive handling built for compliance and reliability.',
-    slug: 'pharmaceuticals-logistics',
-    image: servicePharmaceuticalsImage,
-  },
-  {
-    title: 'Horticulture Exports',
-    description:
-      'Fresh produce export support designed around fast turnaround and quality control.',
-    slug: 'horticulture-exports',
-    image: serviceHorticultureImage,
-  },
-]
-
-const moreServices = [
-  {
-    title: 'Perishables & Horticulture',
-    subtitle: 'Cold chain support from dispatch to destination',
-    slug: 'perishables-logistics',
-  },
-  {
-    title: 'Medical Equipment Importation',
-    subtitle: 'Regulated movement for health-critical inventory',
-    slug: 'pharmaceuticals-logistics',
-  },
-  {
-    title: 'Cargo Transportation',
-    subtitle: 'Regional and cross-border road hauled freight',
-    slug: 'road-cargo-transportation',
-  },
-  {
-    title: 'Car Importation & Clearing',
-    subtitle: 'Complete vehicle import processing and customs release',
-    slug: 'car-importation',
-  },
-  {
-    title: 'Warehousing',
-    subtitle: 'Secure storage for goods awaiting dispatch or consolidation',
-    slug: 'warehousing',
-  },
-  {
-    title: 'Imports & Exports Consultancy',
-    subtitle: 'Practical planning for customs and global trade operations',
-    slug: 'imports-exports-consultancy',
-  },
-]
-
-const quoteOptions = [
-  'General Cargo Clearing & Forwarding',
-  'Sea Freight',
-  'Road Freight',
-  'Pharmaceuticals Logistics',
-  'Perishables Logistics',
-  'Road Cargo Transportation',
-  'Rail Cargo Transportation',
-  'Car Importation & Clearing',
-  'Warehousing',
-  'Imports and Exports Consultancy',
-  'Horticulture Exports',
-  'Curio Exports and Logistics',
-]
 
 const CURRENT_YEAR = new Date().getFullYear()
 
@@ -1207,26 +1105,9 @@ function HomePage() {
               title="A short manifest for your shipment."
             />
             <ol className="border-border border-t">
-              {[
-                [
-                  'Send the details',
-                  'You provide cargo type, route, arrival date and the documents you have.',
-                ],
-                [
-                  'Review the documents',
-                  'We identify missing information and the checks to confirm for the cargo.',
-                ],
-                [
-                  'Coordinate the handoff',
-                  'We agree on the clearance and transport steps with you.',
-                ],
-                [
-                  'Confirm delivery',
-                  'We keep the contact route clear through the final delivery handoff.',
-                ],
-              ].map(([step, detail], index) => (
+              {shippingSteps.map(({ title, detail }, index) => (
                 <li
-                  key={step}
+                  key={title}
                   className="border-border grid gap-2 border-b py-5 sm:grid-cols-[4rem_1fr] sm:gap-4"
                 >
                   <span className="text-amber-strong font-mono text-sm">
@@ -1234,7 +1115,7 @@ function HomePage() {
                   </span>
                   <span>
                     <span className="text-deep-teal block font-semibold">
-                      {step}
+                      {title}
                     </span>
                     <span className="text-muted-foreground mt-1 block max-w-2xl text-sm leading-6">
                       {detail}
