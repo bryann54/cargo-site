@@ -36,11 +36,25 @@ export const serviceGroups = [
   },
   {
     title: 'Clearing and Forwarding',
-    items: ['General Cargo', 'Air Freight', 'Sea Freight', 'Road Freight', 'Pharmaceuticals Logistics', 'Perishables Logistics'],
+    items: [
+      'General Cargo',
+      'Air Freight',
+      'Sea Freight',
+      'Road Freight',
+      'Pharmaceuticals Logistics',
+      'Perishables Logistics',
+    ],
   },
   {
     title: 'General',
-    items: ['Car Importation & Clearing', 'Warehousing Solutions', 'Imports & Exports Consultancy', 'Horticulture Exports', 'Curio Exports & Logistics', 'Medical Devices Importation'],
+    items: [
+      'Car Importation & Clearing',
+      'Warehousing Solutions',
+      'Imports & Exports Consultancy',
+      'Horticulture Exports',
+      'Curio Exports & Logistics',
+      'Medical Devices Importation',
+    ],
   },
   {
     title: 'Cargo Transportation',

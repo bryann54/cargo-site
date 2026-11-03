@@ -16,6 +16,21 @@ const logoAssets = {
   symbol: { dark: symbol, light: symbol },
 }
 
-export function Logo({ variant = 'horizontal', tone = 'dark', alt = 'Tested & Trusted Clearing & Forwarding', className, ...props }: LogoProps) {
-  return <img src={logoAssets[variant][tone]} alt={alt} className={className} width={variant === 'symbol' ? 96 : variant === 'stacked' ? 260 : 456} height={variant === 'symbol' ? 96 : variant === 'stacked' ? 242 : 88} {...props} />
+export function Logo({
+  variant = 'horizontal',
+  tone = 'dark',
+  alt = 'Tested & Trusted Clearing & Forwarding',
+  className,
+  ...props
+}: LogoProps) {
+  return (
+    <img
+      src={logoAssets[variant][tone]}
+      alt={alt}
+      className={className}
+      width={variant === 'symbol' ? 96 : variant === 'stacked' ? 260 : 456}
+      height={variant === 'symbol' ? 96 : variant === 'stacked' ? 242 : 88}
+      {...props}
+    />
+  )
 }

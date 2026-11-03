@@ -41,8 +41,13 @@ describe('whatsapp link builder', () => {
 
 describe('app smoke', () => {
   it('renders the home page title', () => {
-    window.history.pushState({}, '', '/')
+    window.history.pushState({}, '', '/cargo-site/')
     render(<App />)
-    expect(screen.getByText(/Fast, Reliable Clearing and Forwarding Company in Kenya/i)).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', {
+        level: 1,
+        name: /Cargo moving through Kenya starts with the right paperwork/i,
+      }),
+    ).toBeInTheDocument()
   })
 })

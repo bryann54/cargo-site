@@ -21,18 +21,18 @@ Build a production-quality, fully responsive marketing website for a **Kenyan cl
 
 ## 3. Tech Stack (non-negotiable)
 
-| Concern | Choice |
-|---|---|
-| Build | Vite + React (latest stable) + TypeScript (`strict: true`) |
-| Styling | Tailwind CSS (use the version the current shadcn CLI installs) |
-| UI primitives | **shadcn/ui** (initialise via the official CLI; verify steps against the current shadcn docs) |
-| Icons | `lucide-react` (+ inline SVG for brand icons like WhatsApp/TikTok if missing) |
-| Routing | `react-router` (lazy-loaded routes) |
-| Forms | `react-hook-form` + `zod` + `@hookform/resolvers`, using the shadcn `Form` components |
-| Carousels | shadcn `Carousel` (Embla) with `embla-carousel-autoplay` |
-| SEO | A small `<Seo />` component (title, description, OG tags, canonical) |
-| Quality | ESLint, Prettier (+ tailwind plugin), Vitest + React Testing Library |
-| Package manager | `pnpm` (document npm/yarn equivalents in README) |
+| Concern         | Choice                                                                                        |
+| --------------- | --------------------------------------------------------------------------------------------- |
+| Build           | Vite + React (latest stable) + TypeScript (`strict: true`)                                    |
+| Styling         | Tailwind CSS (use the version the current shadcn CLI installs)                                |
+| UI primitives   | **shadcn/ui** (initialise via the official CLI; verify steps against the current shadcn docs) |
+| Icons           | `lucide-react` (+ inline SVG for brand icons like WhatsApp/TikTok if missing)                 |
+| Routing         | `react-router` (lazy-loaded routes)                                                           |
+| Forms           | `react-hook-form` + `zod` + `@hookform/resolvers`, using the shadcn `Form` components         |
+| Carousels       | shadcn `Carousel` (Embla) with `embla-carousel-autoplay`                                      |
+| SEO             | A small `<Seo />` component (title, description, OG tags, canonical)                          |
+| Quality         | ESLint, Prettier (+ tailwind plugin), Vitest + React Testing Library                          |
+| Package manager | `pnpm` (document npm/yarn equivalents in README)                                              |
 
 Install shadcn components as needed: `button`, `card`, `input`, `textarea`, `select`, `form`, `label`, `navigation-menu`, `sheet`, `accordion`, `carousel`, `badge`, `separator`, `sonner`, `skeleton`, `tooltip`, `scroll-area`.
 
@@ -64,10 +64,10 @@ Define everything as **shadcn CSS variables** in `src/index.css` for both `:root
 2. **Header** (sticky): logo, primary nav, **"Inquire"** CTA button that opens the Quote dialog.
    - Nav: Home, About Us, **Services (mega menu)**, Partnerships, Blogs, Contact Us.
    - **Services mega menu** (shadcn `NavigationMenu`), four columns:
-     - *Global to Kenya Clearing*: Clearing agents JKIA Nairobi, Diplomatic Cargo Clearance, and "X to Kenya Clearing" for Israel, Netherlands, China, Egypt, Europe, Germany, India, Japan, Korea, Turkey, UAE, UK, Russia.
-     - *Clearing and Forwarding*: General Cargo, Air Freight, Sea Freight, Road Freight, Pharmaceuticals Logistics, Perishables Logistics.
-     - *General*: Car Importation & Clearing, Warehousing Solutions, Imports & Exports Consultancy, Horticulture Exports, Curio Exports & Logistics, Medical Devices Importation.
-     - *Cargo Transportation*: Road Cargo Transportation, Rail Cargo Transportation.
+     - _Global to Kenya Clearing_: Clearing agents JKIA Nairobi, Diplomatic Cargo Clearance, and "X to Kenya Clearing" for Israel, Netherlands, China, Egypt, Europe, Germany, India, Japan, Korea, Turkey, UAE, UK, Russia.
+     - _Clearing and Forwarding_: General Cargo, Air Freight, Sea Freight, Road Freight, Pharmaceuticals Logistics, Perishables Logistics.
+     - _General_: Car Importation & Clearing, Warehousing Solutions, Imports & Exports Consultancy, Horticulture Exports, Curio Exports & Logistics, Medical Devices Importation.
+     - _Cargo Transportation_: Road Cargo Transportation, Rail Cargo Transportation.
      - Plus 3 image feature tiles and a **"View Services"** button.
    - **Mobile:** shadcn `Sheet` drawer with an `Accordion` for the services groups.
 3. **Footer** (deep teal), four blocks:
@@ -81,7 +81,7 @@ Define everything as **shadcn CSS variables** in `src/index.css` for both `:root
 
 ### 5.2 Home page: sections in this exact order
 
-1. **Hero carousel** (full-width, autoplay, pause on hover, dots/arrows, 4 slides). Each slide: background image with teal gradient overlay, eyebrow/brand line, H1/H2, supporting paragraph, 3 trust badges (*Licensed Customs Agent*, *KIFWA Certified*, *Global Logistics Network*), and two CTAs: **Request Quote** and **WhatsApp Us**.
+1. **Hero carousel** (full-width, autoplay, pause on hover, dots/arrows, 4 slides). Each slide: background image with teal gradient overlay, eyebrow/brand line, H1/H2, supporting paragraph, 3 trust badges (_Licensed Customs Agent_, _KIFWA Certified_, _Global Logistics Network_), and two CTAs: **Request Quote** and **WhatsApp Us**.
    - Slides: (1) general "Fast, Reliable Clearing and Forwarding Company in Kenya", (2) Air Freight, (3) Sea Freight, (4) Road Freight.
    - Only the first slide uses `<h1>`; the others use `<h2>`.
 2. **Service highlight carousel**: 4 compact slides (Clearing & Forwarding intro with a quote CTA, Air Freight, Ocean Freight, Road Freight each with "View Service").
@@ -91,8 +91,8 @@ Define everything as **shadcn CSS variables** in `src/index.css` for both `:root
 6. **Stats band** (deep teal): animated counters, triggered once on viewport entry via `IntersectionObserver` in a reusable `useCountUp` hook. Stats: Years of Experience, Transportation Trucks, Delivered Packages, Satisfied Clients. Seed: `15+`, `50+`, `10,000+`, `1,279+` (config-driven).
 7. **More Logistics Services**: grid of 6 cards (Perishables/Horticulture, Medical Equipment Importation, Cargo Transportation, Car Importation & Clearing, Warehousing, Imports & Exports Consultancy) + "View More" button to `/services`.
 8. **Why Choose Us**: 6 feature tiles with icons: Worldwide Logistics Network, Personalized Logistics Solutions, Specialized Cargo Handling, 24/7 Shipment Support, On-Time Delivery Commitment, Trusted Clearing Agent.
-9. **Trusted Partners & Global Network**: three labelled groups (*Shipping Lines*, *Airlines*, *Cargo Handling & Warehousing*) rendered as logo grids or a marquee. Use neutral text/placeholder logo tiles driven by data, with grayscale-to-colour hover. Do not embed third-party trademarked logos you do not have rights to.
-10. **Licensed & Certified**: heading + paragraph (licensed customs agent; KNCCI and KIFWA membership; KRA compliant; Mombasa Port and JKIA) + 3 certificate thumbnails (*KNCCI Membership*, *KIFWA Membership Certificate*, *Customs Clearing License*) that open in a **lightbox** (shadcn `Dialog`). Use placeholders.
+9. **Trusted Partners & Global Network**: three labelled groups (_Shipping Lines_, _Airlines_, _Cargo Handling & Warehousing_) rendered as logo grids or a marquee. Use neutral text/placeholder logo tiles driven by data, with grayscale-to-colour hover. Do not embed third-party trademarked logos you do not have rights to.
+10. **Licensed & Certified**: heading + paragraph (licensed customs agent; KNCCI and KIFWA membership; KRA compliant; Mombasa Port and JKIA) + 3 certificate thumbnails (_KNCCI Membership_, _KIFWA Membership Certificate_, _Customs Clearing License_) that open in a **lightbox** (shadcn `Dialog`). Use placeholders.
 11. **"We're here to help" + Request Quote form**: two-column. Left has a short pitch (IDF preparation, COC/COO facilitation, Bill of Lading processing), two ✔ points (logistics essentials, KRA certified) and a logo placeholder. Right is the **QuoteForm** (see 5.4).
 12. **How It Works**: 4 numbered steps (Request a Quote → Submit Shipping Documents → We Clear Your Cargo → We Deliver) with connectors, horizontal on desktop and vertical on mobile.
 13. **Blogs**: 3 latest post cards (image, title, excerpt, "x words · y min read", Read More) + "View More".
@@ -102,17 +102,17 @@ Define everything as **shadcn CSS variables** in `src/index.css` for both `:root
 
 ### 5.3 Other routes (shared components, data-driven)
 
-| Route | Content |
-|---|---|
-| `/about` | Company story, mission/values, licences strip, stats, CTA |
-| `/services` | Categorised service listing (Global to Kenya, Clearing & Forwarding, General, Cargo Transportation) |
+| Route             | Content                                                                                                                                                                                                                                 |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/about`          | Company story, mission/values, licences strip, stats, CTA                                                                                                                                                                               |
+| `/services`       | Categorised service listing (Global to Kenya, Clearing & Forwarding, General, Cargo Transportation)                                                                                                                                     |
 | `/services/:slug` | **One dynamic `ServiceDetailPage`** driven by `src/data/services.ts` (hero, overview, benefits, process, FAQ via `Accordion`, related services, CTA). Covers every service and every "X to Kenya" corridor, so no per-page duplication. |
-| `/partnerships` | Partner categories and a "Become a partner" CTA |
-| `/blogs` | Paginated/filterable grid of posts |
-| `/blogs/:slug` | Post detail with reading time and related posts (seed 3–6 short sample posts) |
-| `/contact` | Contact details, hours, map, and the same QuoteForm |
-| `/terms` | Terms & Conditions page (clearly marked placeholder copy) |
-| `*` | Friendly 404 page |
+| `/partnerships`   | Partner categories and a "Become a partner" CTA                                                                                                                                                                                         |
+| `/blogs`          | Paginated/filterable grid of posts                                                                                                                                                                                                      |
+| `/blogs/:slug`    | Post detail with reading time and related posts (seed 3–6 short sample posts)                                                                                                                                                           |
+| `/contact`        | Contact details, hours, map, and the same QuoteForm                                                                                                                                                                                     |
+| `/terms`          | Terms & Conditions page (clearly marked placeholder copy)                                                                                                                                                                               |
+| `*`               | Friendly 404 page                                                                                                                                                                                                                       |
 
 ### 5.4 QuoteForm
 
