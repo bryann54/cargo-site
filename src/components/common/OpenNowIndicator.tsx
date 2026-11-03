@@ -1,54 +1,33 @@
 import { useEffect, useState } from 'react'
 import { siteConfig } from '@/config/site'
 
-function getOfficeStatus(now = new Date()) {
-  const parts = new Intl.DateTimeFormat('en-GB', {
-    timeZone: 'Africa/Nairobi',
-    weekday: 'short',
-    hour: '2-digit',
-    minute: '2-digit',
-    hourCycle: 'h23',
-  }).formatToParts(now)
-  const weekday = parts.find((part) => part.type === 'weekday')?.value ?? ''
-  const hour = Number(parts.find((part) => part.type === 'hour')?.value ?? 0)
-  const minute = Number(
-    parts.find((part) => part.type === 'minute')?.value ?? 0,
-  )
-  const weekdayIndex = [
-    'Sun',
-    'Mon',
-    'Tue',
-    'Wed',
-    'Thu',
-    'Fri',
-    'Sat',
-  ].indexOf(weekday)
-  const currentMinute = hour * 60 + minute
-  const [openHour, openMinute] = siteConfig.openingHours.opensAt
-    .split(':')
-    .map(Number)
-  const [closeHour, closeMinute] = siteConfig.openingHours.closesAt
-    .split(':')
-    .map(Number)
-  const opensAt = openHour * 60 + openMinute
-  const closesAt = closeHour * 60 + closeMinute
+const NAIROBI_OFFSET_MS = 3 * 60 * 60 * 1000 // UTC+3, no daylight saving
 
-  const isWorkday =
-    weekdayIndex >= 0 &&
-    siteConfig.openingHours.weekdays.includes(
-      weekdayIndex as (typeof siteConfig.openingHours.weekdays)[number],
-    )
-  return isWorkday && currentMinute >= opensAt && currentMinute < closesAt
+const toMinutes = (time: string) => {
+  const [hours, minutes] = time.split(':').map(Number)
+  return hours * 60 + minutes
+}
+
+export function isOpenAt(now: Date): boolean {
+  const nairobi = new Date(now.getTime() + NAIROBI_OFFSET_MS)
+  const day = nairobi.getUTCDay()
+  const minutes = nairobi.getUTCHours() * 60 + nairobi.getUTCMinutes()
+
+  return siteConfig.openingHours.some(
+    (slot) =>
+      slot.days.includes(day) &&
+      minutes >= toMinutes(slot.opensAt) &&
+      minutes < toMinutes(slot.closesAt),
+  )
 }
 
 export function OpenNowIndicator({ className = '' }: { className?: string }) {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(() => isOpenAt(new Date()))
 
   useEffect(() => {
-    const updateStatus = () => setIsOpen(getOfficeStatus())
-    updateStatus()
-    const intervalId = window.setInterval(updateStatus, 60_000)
-    return () => window.clearInterval(intervalId)
+    const update = () => setIsOpen(isOpenAt(new Date()))
+    const id = window.setInterval(update, 60_000)
+    return () => window.clearInterval(id)
   }, [])
 
   return (

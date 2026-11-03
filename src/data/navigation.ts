@@ -1,6 +1,8 @@
-export type NavItem = {
-  label: string
-  href: string
+export type NavItem = { label: string; href: string }
+
+export type ServiceGroup = {
+  title: string
+  items: { label: string; href: string }[]
 }
 
 export const navItems: NavItem[] = [
@@ -12,52 +14,47 @@ export const navItems: NavItem[] = [
   { label: 'Contact Us', href: '/contact' },
 ]
 
-export const serviceGroups = [
-  {
-    title: 'Global to Kenya Clearing',
-    items: [
-      'Clearing agents JKIA Nairobi',
-      'Diplomatic Cargo Clearance',
-      'X to Kenya Clearing',
-      'Israel',
-      'Netherlands',
-      'China',
-      'Egypt',
-      'Europe',
-      'Germany',
-      'India',
-      'Japan',
-      'Korea',
-      'Turkey',
-      'UAE',
-      'UK',
-      'Russia',
-    ],
-  },
+export const serviceGroups: ServiceGroup[] = [
   {
     title: 'Clearing and Forwarding',
     items: [
-      'General Cargo',
-      'Air Freight',
-      'Sea Freight',
-      'Road Freight',
-      'Pharmaceuticals Logistics',
-      'Perishables Logistics',
+      { label: 'General Cargo', href: '/services/general-cargo' },
+      { label: 'Air Freight', href: '/services/air-freight' },
+      { label: 'Sea Freight', href: '/services/ocean-freight' },
+      { label: 'Road Freight', href: '/services/road-freight' },
+      {
+        label: 'Pharmaceuticals Logistics',
+        href: '/services/pharmaceuticals-logistics',
+      },
+      {
+        label: 'Perishables Logistics',
+        href: '/services/perishables-logistics',
+      },
     ],
   },
   {
     title: 'General',
     items: [
-      'Car Importation & Clearing',
-      'Warehousing Solutions',
-      'Imports & Exports Consultancy',
-      'Horticulture Exports',
-      'Curio Exports & Logistics',
-      'Medical Devices Importation',
+      { label: 'Car Importation & Clearing', href: '/services/car-importation' },
+      { label: 'Warehousing Solutions', href: '/services/warehousing' },
+      {
+        label: 'Imports & Exports Consultancy',
+        href: '/services/imports-exports-consultancy',
+      },
+      { label: 'Horticulture Exports', href: '/services/horticulture-exports' },
     ],
   },
   {
     title: 'Cargo Transportation',
-    items: ['Road Cargo Transportation', 'Rail Cargo Transportation'],
+    items: [
+      {
+        label: 'Road Cargo Transportation',
+        href: '/services/road-cargo-transportation',
+      },
+      {
+        label: 'Rail Cargo Transportation',
+        href: '/services/rail-cargo-transportation',
+      },
+    ],
   },
 ]

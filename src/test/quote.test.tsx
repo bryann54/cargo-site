@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import App from '@/App'
+import App from '@/app/App'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { quoteSchema } from '@/features/quote/schema'
 import { submitQuote } from '@/features/quote/api'
@@ -15,7 +15,6 @@ describe('quote form schema', () => {
       service: 'Sea Freight',
       message: 'Need a quote',
     })
-
     expect(result.success).toBe(true)
   })
 
@@ -27,7 +26,6 @@ describe('quote form schema', () => {
       country: 'Kenya',
       service: 'Sea Freight',
     })
-
     expect(result.success).toBe(false)
   })
 
@@ -39,7 +37,6 @@ describe('quote form schema', () => {
       country: 'Kenya',
       service: 'Sea Freight',
     })
-
     expect(result.success).toBe(false)
   })
 })
@@ -67,7 +64,6 @@ describe('quote fallback', () => {
       },
       navigate,
     )
-
     expect(result.whatsappFallback).toBe(true)
     expect(navigate).toHaveBeenCalledOnce()
     expect(navigate.mock.calls[0][0]).toContain('https://wa.me/254114628283')
@@ -82,6 +78,17 @@ describe('app smoke', () => {
       screen.getByRole('heading', {
         level: 1,
         name: /Cargo moving through Kenya starts with the right paperwork/i,
+      }),
+    ).toBeInTheDocument()
+  })
+
+  it('renders a deep route', () => {
+    window.history.pushState({}, '', '/cargo-site/about')
+    render(<App />)
+    expect(
+      screen.getByRole('heading', {
+        level: 2,
+        name: /A dedicated clearing and forwarding team/i,
       }),
     ).toBeInTheDocument()
   })

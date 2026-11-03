@@ -62,21 +62,12 @@
   --animate-accordion-up: accordion-up 0.2s ease-out;
 
   @keyframes accordion-down {
-    from {
-      height: 0;
-    }
-    to {
-      height: var(--radix-accordion-content-height);
-    }
+    from { height: 0; }
+    to { height: var(--radix-accordion-content-height); }
   }
-
   @keyframes accordion-up {
-    from {
-      height: var(--radix-accordion-content-height);
-    }
-    to {
-      height: 0;
-    }
+    from { height: var(--radix-accordion-content-height); }
+    to { height: 0; }
   }
 }
 
@@ -93,8 +84,24 @@ body {
   line-height: 1.5;
 }
 
-* {
-  box-sizing: border-box;
+* { box-sizing: border-box; }
+
+/* ─── Motion ───────────────────────────────────────────────────────── */
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes carousel-content-in {
@@ -108,8 +115,50 @@ body {
   }
 }
 
+@keyframes ken-burns {
+  from { transform: scale(1); }
+  to { transform: scale(1.04); }
+}
+
+.animate-rise-in {
+  animation: rise-in 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.animate-fade-in {
+  animation: fade-in 600ms ease-out both;
+}
+
 .animate-carousel-content {
   animation: carousel-content-in 650ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.hero-image-active {
+  animation: ken-burns 12s ease-out both;
+}
+
+/* Stagger helper — apply to a parent, children fade in sequentially */
+.stagger > * {
+  animation: rise-in 650ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.stagger > *:nth-child(1) { animation-delay: 40ms; }
+.stagger > *:nth-child(2) { animation-delay: 120ms; }
+.stagger > *:nth-child(3) { animation-delay: 200ms; }
+.stagger > *:nth-child(4) { animation-delay: 280ms; }
+.stagger > *:nth-child(5) { animation-delay: 360ms; }
+.stagger > *:nth-child(6) { animation-delay: 440ms; }
+
+/* Scroll-triggered sections */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 700ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
 }
 
 .manifest-grid {
@@ -122,30 +171,7 @@ body {
   background-size: 28px 28px;
 }
 
-.text-amber-strong {
-  color: var(--amber);
-}
-
-.bg-amber-strong {
-  background-color: var(--amber);
-}
-
-.bg-whatsapp {
-  background-color: var(--whatsapp);
-}
-
-.hover\:bg-whatsapp-hover:hover {
-  background-color: var(--whatsapp-hover);
-}
-
-.dark-surface :focus-visible {
-  outline-color: var(--paper);
-}
-
-img {
-  max-width: 100%;
-  display: block;
-}
+img { max-width: 100%; display: block; }
 
 h1,
 h2,
@@ -155,14 +181,20 @@ h2,
 }
 
 ::selection {
-  background: #0f766e;
+  background: var(--primary);
   color: #ffffff;
 }
 
 :focus-visible {
-  outline: 3px solid #0f766e;
+  outline: 3px solid var(--primary);
   outline-offset: 3px;
 }
+
+.dark-surface :focus-visible,
+.bg-deep-teal :focus-visible {
+  outline-color: var(--paper);
+}
+
 button,
 input,
 select,
@@ -178,5 +210,12 @@ textarea {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+  .hero-image-active {
+    animation: none;
   }
 }

@@ -342,33 +342,3 @@ export const services: Service[] = [
     ],
   },
 ]
-
-export const featureServices = [
-  { slug: 'general-cargo', title: 'General Cargo', badge: 'Get a Quote' },
-  {
-    slug: 'pharmaceuticals-logistics',
-    title: 'Pharmaceuticals',
-    badge: 'Speak to Expert',
-  },
-  {
-    slug: 'horticulture-exports',
-    title: 'Horticulture Exports',
-    badge: 'Start Export Process',
-  },
-]
-
-export const xToKenyaServices = [
-  'Israel',
-  'Netherlands',
-  'China',
-  'Egypt',
-  'Europe',
-  'Germany',
-  'India',
-  'Japan',
-  'Korea',
-  'Turkey',
-  'UAE',
-  'UK',
-  'Russia',
-]
