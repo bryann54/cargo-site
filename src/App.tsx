@@ -791,8 +791,12 @@ function QuoteDialog() {
     }
 
     try {
-      await submitQuote(values)
-      toast.success('Your quote request has been sent successfully.')
+      const result = await submitQuote(values)
+      toast.success(
+        result.whatsappFallback
+          ? 'Opening WhatsApp. Press send to deliver your request.'
+          : 'Your quote request has been sent successfully.',
+      )
       reset()
       setOpen(false)
     } catch (error) {
@@ -898,7 +902,12 @@ function QuoteDialog() {
             />
           </div>
           <div className="hidden">
-            <Input {...register('companyHidden')} />
+            <Input
+              {...register('companyHidden')}
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+            />
           </div>
           <div className="flex justify-end gap-3">
             <Button
@@ -2055,8 +2064,12 @@ function QuoteForm({
   const onSubmit = async (values: QuoteFormValues) => {
     if (values.companyHidden) return
     try {
-      await submitQuote(values)
-      toast.success('Got it. We will reply by WhatsApp or email shortly.')
+      const result = await submitQuote(values)
+      toast.success(
+        result.whatsappFallback
+          ? 'Opening WhatsApp. Press send to deliver your request.'
+          : 'Got it. We will reply by WhatsApp or email shortly.',
+      )
       reset()
       setQuoteOpen(false)
     } catch (error) {
@@ -2176,7 +2189,12 @@ function QuoteForm({
         />
       </div>
       <div className="hidden">
-        <Input {...register('companyHidden')} />
+        <Input
+          {...register('companyHidden')}
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+        />
       </div>
       <Button type="submit" disabled={isSubmitting} className="w-full">
         {isSubmitting ? 'Sending…' : 'Send shipment details'}
