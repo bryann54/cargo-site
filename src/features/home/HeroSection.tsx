@@ -11,19 +11,21 @@ export function HeroSection() {
   const { setOpen: setQuoteOpen } = useQuoteDialog()
   const [activeSlide, setActiveSlide] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
-  const [reducedMotion, setReducedMotion] = useState(false)
+  
+  // Initialize via function to avoid set-state-in-effect warning
+  const [reducedMotion, setReducedMotion] = useState(() => 
+    typeof window !== 'undefined' ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false
+  )
+  
   const slide = heroSlides[activeSlide]
 
-  // Check for reduced motion preference
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setReducedMotion(mq.matches)
     const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches)
     mq.addEventListener('change', handler)
     return () => mq.removeEventListener('change', handler)
   }, [])
 
-  // Autoplay effect
   useEffect(() => {
     if (isPaused || reducedMotion) return
     const timer = setInterval(() => {
