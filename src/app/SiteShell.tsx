@@ -15,6 +15,7 @@ const BlogPage = lazy(() => import('@/pages/BlogPage'))
 const BlogDetailPage = lazy(() => import('@/pages/BlogDetailPage'))
 const ContactPage = lazy(() => import('@/pages/ContactPage'))
 const TermsPage = lazy(() => import('@/pages/TermsPage'))
+const DutyCalculatorPage = lazy(() => import('@/pages/DutyCalculatorPage'))
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'))
 
 export function SiteShell() {
@@ -45,6 +46,7 @@ export function SiteShell() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/services" element={<ServicesPage />} />
             <Route path="/services/:slug" element={<ServiceDetailPage />} />
+            <Route path="/duty-calculator" element={<DutyCalculatorPage />} />
             <Route path="/partnerships" element={<PartnershipsPage />} />
             <Route path="/blogs" element={<BlogPage />} />
             <Route path="/blogs/:slug" element={<BlogDetailPage />} />

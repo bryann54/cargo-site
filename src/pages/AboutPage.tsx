@@ -1,24 +1,24 @@
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 import heroGeneralImage from '@/assets/hero-general.jpg'
-import founderImage from '@/assets/service-medical.jpg' // Placeholder - replace with actual founder
-import directorImage from '@/assets/service-car-import.jpg' // Placeholder - replace with actual director
+import founderImage from '@/assets/service-medical.jpg' // Placeholder
+import directorImage from '@/assets/service-car-import.jpg' // Placeholder
 import { Seo } from '@/components/common/Seo'
 import { SectionHeading } from '@/components/common/SectionHeading'
 import { useQuoteDialog } from '@/features/quote/QuoteDialogContext'
 
 const leadership = [
   {
-    name: 'Founder & CEO',
-    role: 'Managing Director',
+    name: 'Levinah Kagwiria',
+    role: 'Founder & CEO',
     image: founderImage,
-    bio: 'With over a decade of experience in customs clearance and freight forwarding, our CEO leads the company with a focus on compliance, reliability, and client-first service.',
+    bio: 'With over a decade of experience in customs clearance and freight forwarding, Levinah leads the company with a focus on compliance, reliability, and client-first service.',
   },
   {
-    name: 'Head of Operations',
-    role: 'Operations Director',
+    name: 'Jane Smith', 
+    role: 'Head of Operations',
     image: directorImage,
-    bio: 'Overseeing day-to-day logistics and terminal handoffs, our Operations Director ensures that cargo moves smoothly from port to final destination.',
+    bio: 'Overseeing day-to-day logistics and terminal handoffs, Jane ensures that cargo moves smoothly from port to final destination.',
   },
 ]
 
@@ -64,37 +64,35 @@ export function AboutPage() {
           width="1200"
           height="900"
           loading="lazy"
-          className="aspect-[4/3] w-full object-cover"
+          className="aspect-[4/3] w-full object-cover rounded-2xl"
         />
       </div>
 
-      {/* Leadership Section */}
+      {/* Leadership Section - Compact Cards */}
       <div className="mt-16 md:mt-24">
         <SectionHeading
           eyebrow="Leadership"
           title="The people behind the operations."
         />
-        <div className="mt-10 grid gap-12 md:grid-cols-2">
+        <div className="mt-10 grid gap-6 md:grid-cols-2">
           {leadership.map((person) => (
-            <div key={person.name} className="flex flex-col gap-6">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-slate-100">
-                <img
-                  src={person.image}
-                  alt={person.name}
-                  width="800"
-                  height="1000"
-                  loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
-                />
-              </div>
-              <div>
-                <h3 className="font-display text-deep-teal text-2xl font-semibold">
+            <div key={person.name} className="flex flex-col sm:flex-row gap-5 items-start bg-card border border-border p-5 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+              <img
+                src={person.image}
+                alt={person.name}
+                width="200"
+                height="250"
+                loading="lazy"
+                className="w-full sm:w-32 aspect-[4/5] object-cover rounded-xl shrink-0"
+              />
+              <div className="flex flex-col py-1">
+                <h3 className="font-display text-deep-teal text-xl font-semibold">
                   {person.name}
                 </h3>
-                <p className="text-primary mt-1 text-sm font-medium uppercase tracking-wider">
+                <p className="text-primary mt-0.5 text-xs font-bold uppercase tracking-wider">
                   {person.role}
                 </p>
-                <p className="text-muted-foreground mt-4 leading-7 text-slate-600">
+                <p className="text-muted-foreground mt-3 text-sm leading-6 line-clamp-4">
                   {person.bio}
                 </p>
               </div>

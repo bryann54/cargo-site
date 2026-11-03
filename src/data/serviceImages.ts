@@ -1,5 +1,4 @@
 import heroAirImage from '@/assets/hero-air.jpg'
-import heroGeneralImage from '@/assets/hero-general.jpg'
 import heroRoadImage from '@/assets/hero-road.jpg'
 import heroSeaImage from '@/assets/hero-sea.jpg'
 import serviceCarImportImage from '@/assets/service-car-import.jpg'
