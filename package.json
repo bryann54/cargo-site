@@ -13,8 +13,7 @@
     "typecheck": "tsc -b",
     "format": "prettier --write .",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "deploy": "pnpm build && gh-pages -d dist"
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@fontsource-variable/lora": "^5.3.0",
@@ -45,7 +44,6 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
-    "gh-pages": "^6.3.0",
     "jsdom": "^26.1.0",
     "oxlint": "^1.89.0",
     "prettier": "^3.9.10",
