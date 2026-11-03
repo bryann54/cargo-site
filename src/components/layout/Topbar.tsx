@@ -2,16 +2,14 @@ import { Mail, Phone } from 'lucide-react'
 import { siteConfig } from '@/config/site'
 import { SocialIcon } from '@/components/common/SocialIcon'
 
-const realProfile =
-  /^https:\/\/(www\.)?(facebook|x|instagram|tiktok|linkedin)\.com\/.+/i
-
 export function Topbar() {
   return (
     <div className="dark-surface bg-deep-teal hidden border-b border-white/10 text-sm text-slate-200 md:block">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2">
+        {/* Social Links */}
         <div className="flex items-center gap-4">
           {siteConfig.socials
-            .filter((s) => s.platform === 'whatsapp' || realProfile.test(s.href))
+            .filter((s) => ['instagram', 'linkedin', 'facebook', 'x'].includes(s.platform))
             .map((social) => (
               <a
                 key={social.label}
@@ -25,6 +23,8 @@ export function Topbar() {
               </a>
             ))}
         </div>
+        
+        {/* Contact Info */}
         <div className="flex items-center gap-6">
           <a
             href={`tel:${siteConfig.phoneHref}`}
