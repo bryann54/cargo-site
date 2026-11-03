@@ -20,7 +20,7 @@ export function Footer() {
     <footer className="dark-surface bg-deep-teal text-slate-200">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 md:grid-cols-2 xl:grid-cols-4">
         <div>
-          <Logo className="mb-4 h-12 w-auto" tone="light" />
+          <Logo className="mb-6 h-14 w-auto" tone="light" />
           <p className="mb-4 text-sm text-slate-300">{siteConfig.tagline}</p>
           <Button onClick={() => setQuoteOpen(true)} className="mb-4 text-white">
             Request Quote

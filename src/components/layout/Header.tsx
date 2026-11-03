@@ -28,7 +28,7 @@ export function Header() {
     <header className="border-border bg-background/95 sticky top-0 z-40 border-b shadow-sm backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4">
         <Link to="/" className="flex min-w-0 items-center">
-          <Logo className="h-10 w-auto" />
+          <Logo className="h-12 w-auto" />
         </Link>
 
         <nav className="hidden items-center gap-6 lg:flex">
@@ -70,7 +70,7 @@ export function Header() {
               className="w-[min(88vw,360px)] overflow-y-auto p-0"
             >
               <div className="space-y-4 p-5">
-                <Logo className="h-10 w-auto" />
+                <Logo className="h-12 w-auto" />
                 <SheetTitle className="sr-only">Site navigation</SheetTitle>
                 <SheetDescription className="sr-only">
                   Navigate the Tested &amp; Trusted website.

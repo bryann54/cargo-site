@@ -1,26 +1,9 @@
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 import heroGeneralImage from '@/assets/hero-general.jpg'
-import founderImage from '@/assets/service-medical.jpg' // Placeholder
-import directorImage from '@/assets/service-car-import.jpg' // Placeholder
 import { Seo } from '@/components/common/Seo'
 import { SectionHeading } from '@/components/common/SectionHeading'
 import { useQuoteDialog } from '@/features/quote/QuoteDialogContext'
-
-const leadership = [
-  {
-    name: 'Levinah Kagwiria',
-    role: 'Founder & CEO',
-    image: founderImage,
-    bio: 'With over a decade of experience in customs clearance and freight forwarding, Levinah leads the company with a focus on compliance, reliability, and client-first service.',
-  },
-  {
-    name: 'Jane Smith', 
-    role: 'Head of Operations',
-    image: directorImage,
-    bio: 'Overseeing day-to-day logistics and terminal handoffs, Jane ensures that cargo moves smoothly from port to final destination.',
-  },
-]
 
 export function AboutPage() {
   const { setOpen: setQuoteOpen } = useQuoteDialog()
@@ -66,39 +49,6 @@ export function AboutPage() {
           loading="lazy"
           className="aspect-[4/3] w-full object-cover rounded-2xl"
         />
-      </div>
-
-      {/* Leadership Section - Compact Cards */}
-      <div className="mt-16 md:mt-24">
-        <SectionHeading
-          eyebrow="Leadership"
-          title="The people behind the operations."
-        />
-        <div className="mt-10 grid gap-6 md:grid-cols-2">
-          {leadership.map((person) => (
-            <div key={person.name} className="flex flex-col sm:flex-row gap-5 items-start bg-card border border-border p-5 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-              <img
-                src={person.image}
-                alt={person.name}
-                width="200"
-                height="250"
-                loading="lazy"
-                className="w-full sm:w-32 aspect-[4/5] object-cover rounded-xl shrink-0"
-              />
-              <div className="flex flex-col py-1">
-                <h3 className="font-display text-deep-teal text-xl font-semibold">
-                  {person.name}
-                </h3>
-                <p className="text-primary mt-0.5 text-xs font-bold uppercase tracking-wider">
-                  {person.role}
-                </p>
-                <p className="text-muted-foreground mt-3 text-sm leading-6 line-clamp-4">
-                  {person.bio}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
 
       <div className="border-border mt-16 grid gap-8 border-y py-8 md:grid-cols-[0.7fr_1.3fr]">
