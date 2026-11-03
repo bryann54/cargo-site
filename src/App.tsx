@@ -54,7 +54,7 @@ import { siteConfig } from '@/config/site'
 import { countries } from '@/data/countries'
 import { blogPosts } from '@/data/posts'
 import { partnerGroups } from '@/data/partners'
-import { serviceGroups } from '@/data/navigation'
+import { navItems, serviceGroups } from '@/data/navigation'
 import { services } from '@/data/services'
 import { cn } from '@/lib/utils'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
@@ -231,7 +231,6 @@ function App() {
 
 function SiteShell() {
   const [showBackToTop, setShowBackToTop] = useState(false)
-  const { setOpen } = useQuoteDialog()
   const location = useLocation()
 
   useEffect(() => {
@@ -251,34 +250,34 @@ function SiteShell() {
   return (
     <div className="bg-background text-foreground min-h-screen">
       <Topbar />
-      <Header setQuoteOpen={setOpen} />
+      <Header />
       <main>
         <Routes>
-          <Route path="/" element={<HomePage setQuoteOpen={setOpen} />} />
-          <Route path="/about" element={<AboutPage setQuoteOpen={setOpen} />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
           <Route
             path="/services"
-            element={<ServicesPage setQuoteOpen={setOpen} />}
+            element={<ServicesPage />}
           />
           <Route
             path="/services/:slug"
-            element={<ServiceDetailPage setQuoteOpen={setOpen} />}
+            element={<ServiceDetailPage />}
           />
           <Route
             path="/partnerships"
-            element={<PartnershipsPage setQuoteOpen={setOpen} />}
+            element={<PartnershipsPage />}
           />
           <Route path="/blogs" element={<BlogPage />} />
           <Route path="/blogs/:slug" element={<BlogDetailPage />} />
           <Route
             path="/contact"
-            element={<ContactPage setQuoteOpen={setOpen} />}
+            element={<ContactPage />}
           />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
-      <Footer setQuoteOpen={setOpen} />
+      <Footer />
       <FloatingActions showBackToTop={showBackToTop} />
       <QuoteDialog />
       <Toaster position="top-center" richColors closeButton />
@@ -409,8 +408,9 @@ function SocialIcon({ type }: { type: string }) {
   }
 }
 
-function Header({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
+function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const { setOpen: setQuoteOpen } = useQuoteDialog()
 
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur">
@@ -420,91 +420,62 @@ function Header({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
         </Link>
 
         <nav className="order-2 hidden items-center gap-6 lg:flex">
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              cn(
-                'text-sm font-medium transition',
-                isActive ? 'text-primary' : 'hover:text-primary text-slate-700',
-              )
-            }
-          >
-            Home
-          </NavLink>
-          <NavLink
-            to="/about"
-            className={({ isActive }) =>
-              cn(
-                'text-sm font-medium transition',
-                isActive ? 'text-primary' : 'hover:text-primary text-slate-700',
-              )
-            }
-          >
-            About Us
-          </NavLink>
-          <div className="group relative">
-            <button
-              type="button"
-              className="hover:text-primary inline-flex items-center gap-1 text-sm font-medium text-slate-700 transition"
-            >
-              Services
-              <ChevronRight className="h-4 w-4 rotate-90" />
-            </button>
-            <div className="invisible absolute top-full left-1/2 mt-4 w-[820px] -translate-x-1/2 rounded-2xl border border-slate-200 bg-white p-4 opacity-0 shadow-xl transition-all group-hover:visible group-hover:opacity-100">
-              <div className="grid grid-cols-4 gap-4">
-                {serviceGroups.map((group) => (
-                  <div key={group.title}>
-                    <p className="mb-3 text-sm font-semibold text-slate-800">
-                      {group.title}
-                    </p>
-                    <ul className="space-y-2 text-sm text-slate-600">
-                      {group.items.map((item) => (
-                        <li key={item}>{item}</li>
-                      ))}
-                    </ul>
+          {navItems.map((item) =>
+            item.href === '/services' ? (
+              <div key={item.href} className="group relative">
+                <NavLink
+                  to={item.href}
+                  className={({ isActive }) =>
+                    cn(
+                      'inline-flex items-center gap-1 text-sm font-medium transition',
+                      isActive
+                        ? 'text-primary'
+                        : 'text-slate-700 hover:text-primary',
+                    )
+                  }
+                >
+                  {item.label}
+                  <ChevronRight className="h-4 w-4 rotate-90" />
+                </NavLink>
+                <div className="invisible absolute top-full left-1/2 mt-4 w-[820px] -translate-x-1/2 rounded-2xl border border-slate-200 bg-white p-4 opacity-0 shadow-xl transition-all group-hover:visible group-hover:opacity-100">
+                  <div className="grid grid-cols-4 gap-4">
+                    {serviceGroups.map((group) => (
+                      <div key={group.title}>
+                        <p className="mb-3 text-sm font-semibold text-slate-800">
+                          {group.title}
+                        </p>
+                        <ul className="space-y-2 text-sm text-slate-600">
+                          {group.items.map((service) => (
+                            <li key={service}>{service}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                  <div className="mt-4 flex justify-end">
+                    <Link to="/services" className="text-primary font-medium">
+                      View Services
+                    </Link>
+                  </div>
+                </div>
               </div>
-              <div className="mt-4 flex justify-end">
-                <Link to="/services" className="text-primary font-medium">
-                  View Services
-                </Link>
-              </div>
-            </div>
-          </div>
-          <NavLink
-            to="/partnerships"
-            className={({ isActive }) =>
-              cn(
-                'text-sm font-medium transition',
-                isActive ? 'text-primary' : 'hover:text-primary text-slate-700',
-              )
-            }
-          >
-            Partnerships
-          </NavLink>
-          <NavLink
-            to="/blogs"
-            className={({ isActive }) =>
-              cn(
-                'text-sm font-medium transition',
-                isActive ? 'text-primary' : 'hover:text-primary text-slate-700',
-              )
-            }
-          >
-            Blogs
-          </NavLink>
-          <NavLink
-            to="/contact"
-            className={({ isActive }) =>
-              cn(
-                'text-sm font-medium transition',
-                isActive ? 'text-primary' : 'hover:text-primary text-slate-700',
-              )
-            }
-          >
-            Contact Us
-          </NavLink>
+            ) : (
+              <NavLink
+                key={item.href}
+                to={item.href}
+                className={({ isActive }) =>
+                  cn(
+                    'text-sm font-medium transition',
+                    isActive
+                      ? 'text-primary'
+                      : 'text-slate-700 hover:text-primary',
+                  )
+                }
+              >
+                {item.label}
+              </NavLink>
+            ),
+          )}
         </nav>
 
         <div className="order-3 hidden items-center gap-3 lg:flex">
@@ -537,17 +508,10 @@ function Header({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
                   Navigate the Tested &amp; Trusted website.
                 </SheetDescription>
                 <div className="space-y-2">
-                  {[
-                    '/',
-                    '/about',
-                    '/services',
-                    '/partnerships',
-                    '/blogs',
-                    '/contact',
-                  ].map((href) => (
+                  {navItems.map((item) => (
                     <NavLink
-                      key={href}
-                      to={href}
+                      key={item.href}
+                      to={item.href}
                       onClick={() => setMobileOpen(false)}
                       className={({ isActive }) =>
                         cn(
@@ -558,17 +522,7 @@ function Header({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
                         )
                       }
                     >
-                      {href === '/'
-                        ? 'Home'
-                        : href === '/about'
-                          ? 'About Us'
-                          : href === '/services'
-                            ? 'Services'
-                            : href === '/partnerships'
-                              ? 'Partnerships'
-                              : href === '/blogs'
-                                ? 'Blogs'
-                                : 'Contact Us'}
+                      {item.label}
                     </NavLink>
                   ))}
                 </div>
@@ -610,15 +564,8 @@ function Header({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
   )
 }
 
-function Footer({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
-  return <FooterInner setQuoteOpen={setQuoteOpen} />
-}
-
-function FooterInner({
-  setQuoteOpen,
-}: {
-  setQuoteOpen: (open: boolean) => void
-}) {
+function Footer() {
+  const { setOpen: setQuoteOpen } = useQuoteDialog()
   const currentYear = CURRENT_YEAR
 
   return (
@@ -765,47 +712,6 @@ function FloatingActions({
 
 function QuoteDialog() {
   const { open, setOpen } = useQuoteDialog()
-  const form = useForm<QuoteFormValues>({
-    resolver: zodResolver(quoteSchema),
-    defaultValues: {
-      fullName: '',
-      email: '',
-      phone: '',
-      country: 'Kenya',
-      service: 'General Cargo Clearing & Forwarding',
-      message: '',
-      companyHidden: '',
-    },
-  })
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
-  } = form
-
-  const onSubmit = async (values: QuoteFormValues) => {
-    if (values.companyHidden) {
-      return
-    }
-
-    try {
-      const result = await submitQuote(values)
-      toast.success(
-        result.whatsappFallback
-          ? 'Opening WhatsApp. Press send to deliver your request.'
-          : 'Your quote request has been sent successfully.',
-      )
-      reset()
-      setOpen(false)
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : 'Unable to send your request.',
-      )
-    }
-  }
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-2xl">
@@ -815,119 +721,14 @@ function QuoteDialog() {
             Share a few shipment details so we can review what is needed.
           </DialogDescription>
         </DialogHeader>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="space-y-4"
-          noValidate
-        >
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="fullName">Full name *</Label>
-              <Input
-                id="fullName"
-                {...register('fullName')}
-                aria-invalid={Boolean(errors.fullName)}
-              />
-              {errors.fullName && (
-                <p className="text-sm text-red-600">
-                  {errors.fullName.message}
-                </p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email *</Label>
-              <Input
-                id="email"
-                type="email"
-                {...register('email')}
-                aria-invalid={Boolean(errors.email)}
-              />
-              {errors.email && (
-                <p className="text-sm text-red-600">{errors.email.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="phone">Phone *</Label>
-              <Input
-                id="phone"
-                type="tel"
-                {...register('phone')}
-                aria-invalid={Boolean(errors.phone)}
-              />
-              {errors.phone && (
-                <p className="text-sm text-red-600">{errors.phone.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="country">Country *</Label>
-              <select
-                id="country"
-                {...register('country')}
-                className="border-input bg-background flex h-10 w-full rounded-md border px-3 py-2 text-sm"
-              >
-                {countries.map((country) => (
-                  <option key={country} value={country}>
-                    {country}
-                  </option>
-                ))}
-              </select>
-              {errors.country && (
-                <p className="text-sm text-red-600">{errors.country.message}</p>
-              )}
-            </div>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="service">Service *</Label>
-            <select
-              id="service"
-              {...register('service')}
-              className="border-input bg-background flex h-10 w-full rounded-md border px-3 py-2 text-sm"
-            >
-              {quoteOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-            {errors.service && (
-              <p className="text-sm text-red-600">{errors.service.message}</p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="message">Message</Label>
-            <Textarea
-              id="message"
-              {...register('message')}
-              placeholder="Tell us about your cargo needs"
-            />
-          </div>
-          <div className="hidden">
-            <Input
-              {...register('companyHidden')}
-              tabIndex={-1}
-              autoComplete="off"
-              aria-hidden="true"
-            />
-          </div>
-          <div className="flex justify-end gap-3">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Sending...' : 'Submit Request'}
-            </Button>
-          </div>
-        </form>
+        <QuoteForm onSuccess={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   )
 }
 
-function HomePage({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
+function HomePage() {
+  const { setOpen: setQuoteOpen } = useQuoteDialog()
   const [activeSlide, setActiveSlide] = useState(0)
   const [carouselPaused, setCarouselPaused] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(false)
@@ -1259,14 +1060,14 @@ function HomePage({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
           title="Other cargo needs we can discuss."
         />
         <div className="divide-border border-border mt-8 divide-y border-y">
-          {moreServices.map((service) => (
+          {moreServices.map((service, index) => (
             <Link
               key={service.title}
               to={`/services/${service.slug}`}
               className="group hover:bg-secondary/60 grid gap-2 py-5 transition-colors sm:grid-cols-[4rem_1fr_auto] sm:items-center sm:gap-6"
             >
               <span className="text-amber-strong font-mono text-sm">
-                {String(moreServices.indexOf(service) + 1).padStart(2, '0')}
+                {String(index + 1).padStart(2, '0')}
               </span>
               <span>
                 <span className="font-display text-deep-teal block text-xl font-semibold">
@@ -1393,7 +1194,7 @@ function HomePage({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
             </p>
           </div>
           <div className="rounded-[24px] bg-white p-5 shadow-sm ring-1 ring-slate-200">
-            <QuoteForm setQuoteOpen={setQuoteOpen} />
+            <QuoteForm />
           </div>
         </div>
       </section>
@@ -1553,11 +1354,8 @@ function HomePage({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
   )
 }
 
-function AboutPage({
-  setQuoteOpen,
-}: {
-  setQuoteOpen: (open: boolean) => void
-}) {
+function AboutPage() {
+  const { setOpen: setQuoteOpen } = useQuoteDialog()
   return (
     <div className="mx-auto max-w-7xl px-4 py-16">
       <SectionHeading
@@ -1611,11 +1409,8 @@ function AboutPage({
   )
 }
 
-function ServicesPage({
-  setQuoteOpen,
-}: {
-  setQuoteOpen: (open: boolean) => void
-}) {
+function ServicesPage() {
+  const { setOpen: setQuoteOpen } = useQuoteDialog()
   return (
     <div className="mx-auto max-w-7xl px-4 py-16">
       <div className="grid gap-8 md:grid-cols-[0.65fr_1.35fr]">
@@ -1670,11 +1465,8 @@ function ServicesPage({
   )
 }
 
-function ServiceDetailPage({
-  setQuoteOpen,
-}: {
-  setQuoteOpen: (open: boolean) => void
-}) {
+function ServiceDetailPage() {
+  const { setOpen: setQuoteOpen } = useQuoteDialog()
   const { slug } = useParams()
   const service = services.find((entry) => entry.slug === slug)
 
@@ -1788,11 +1580,8 @@ function ServiceDetailPage({
   )
 }
 
-function PartnershipsPage({
-  setQuoteOpen,
-}: {
-  setQuoteOpen: (open: boolean) => void
-}) {
+function PartnershipsPage() {
+  const { setOpen: setQuoteOpen } = useQuoteDialog()
   return (
     <div className="mx-auto max-w-7xl px-4 py-16">
       <SectionHeading
@@ -1946,11 +1735,7 @@ function BlogDetailPage() {
   )
 }
 
-function ContactPage({
-  setQuoteOpen,
-}: {
-  setQuoteOpen: (open: boolean) => void
-}) {
+function ContactPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-16">
       <SectionHeading
@@ -1974,7 +1759,7 @@ function ContactPage({
           </div>
         </div>
         <div className="rounded-[28px] border border-slate-200 bg-slate-50 p-5">
-          <QuoteForm setQuoteOpen={setQuoteOpen} />
+          <QuoteForm />
         </div>
       </div>
       <div className="mt-10 overflow-hidden rounded-[28px] border border-slate-200">
@@ -2036,11 +1821,7 @@ function NotFoundPage() {
   )
 }
 
-function QuoteForm({
-  setQuoteOpen,
-}: {
-  setQuoteOpen: (open: boolean) => void
-}) {
+function QuoteForm({ onSuccess }: { onSuccess?: () => void }) {
   const form = useForm<QuoteFormValues>({
     resolver: zodResolver(quoteSchema),
     defaultValues: {
@@ -2071,7 +1852,7 @@ function QuoteForm({
           : 'Got it. We will reply by WhatsApp or email shortly.',
       )
       reset()
-      setQuoteOpen(false)
+      onSuccess?.()
     } catch (error) {
       toast.error(
         error instanceof Error
