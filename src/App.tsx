@@ -36,12 +36,19 @@ import { Card } from '@/components/ui/card'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
 import { Textarea } from '@/components/ui/textarea'
 import { siteConfig } from '@/config/site'
 import { countries } from '@/data/countries'
@@ -525,6 +532,10 @@ function Header({ setQuoteOpen }: { setQuoteOpen: (open: boolean) => void }) {
                 <div className="flex items-center justify-between">
                   <Logo className="h-12 w-56" />
                 </div>
+                <SheetTitle className="sr-only">Site navigation</SheetTitle>
+                <SheetDescription className="sr-only">
+                  Navigate the Tested &amp; Trusted website.
+                </SheetDescription>
                 <div className="space-y-2">
                   {[
                     '/',
@@ -796,6 +807,9 @@ function QuoteDialog() {
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>Request a Quote</DialogTitle>
+          <DialogDescription>
+            Share a few shipment details so we can review what is needed.
+          </DialogDescription>
         </DialogHeader>
         <form
           onSubmit={handleSubmit(onSubmit)}
