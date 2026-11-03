@@ -230,7 +230,7 @@ function SiteShell() {
   useEffect(() => {
     const onScroll = () => {
       const scrollPosition = window.scrollY
-      setShowBackToTop(scrollPosition > 300)
+      setShowBackToTop(scrollPosition > 600)
     }
     window.addEventListener('scroll', onScroll)
     onScroll()
@@ -272,7 +272,7 @@ function SiteShell() {
         </Routes>
       </main>
       <Footer setQuoteOpen={setOpen} />
-      <FloatingActions showBackToTop={showBackToTop} setQuoteOpen={setOpen} />
+      <FloatingActions showBackToTop={showBackToTop} />
       <QuoteDialog />
       <Toaster position="top-center" richColors closeButton />
     </div>
@@ -719,14 +719,11 @@ function FooterInner({
 
 function FloatingActions({
   showBackToTop,
-  setQuoteOpen,
 }: {
   showBackToTop: boolean
-  setQuoteOpen: (open: boolean) => void
 }) {
   return (
-    <>
-      <div className="fixed right-4 bottom-5 z-50 flex flex-col items-end gap-3 sm:right-6">
+    <div className="fixed right-[calc(env(safe-area-inset-right)+1rem)] bottom-[calc(env(safe-area-inset-bottom)+1rem)] z-50 flex flex-col items-end gap-3">
         <div className="group relative">
           <a
             href={buildWhatsAppLink()}
@@ -741,32 +738,17 @@ function FloatingActions({
             Chat on WhatsApp
           </span>
         </div>
-        <div className="group relative">
-          <button
-            type="button"
-            onClick={() => setQuoteOpen(true)}
-            aria-label="Request a quote"
-            className="bg-deep-teal flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg ring-4 shadow-slate-900/20 ring-white transition duration-200 hover:scale-105 hover:bg-[#174342] focus-visible:ring-4 focus-visible:ring-cyan-200 focus-visible:outline-none"
-          >
-            <ArrowRight className="h-6 w-6 text-cyan-300" />
-          </button>
-          <span className="pointer-events-none absolute top-1/2 right-[calc(100%+0.75rem)] -translate-y-1/2 rounded-lg bg-slate-900 px-3 py-2 text-xs font-semibold whitespace-nowrap text-white opacity-0 shadow-lg transition group-focus-within:opacity-100 group-hover:opacity-100">
-            Request a quote
-          </span>
-        </div>
-      </div>
-
       {showBackToTop && (
         <button
           type="button"
           aria-label="Back to top"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="bg-primary animate-back-to-top fixed bottom-6 left-1/2 z-40 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-full text-slate-950 shadow-lg ring-4 shadow-cyan-900/20 ring-white/90 transition hover:scale-110"
+          className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-lg ring-4 ring-white transition hover:scale-105"
         >
           <ArrowUp className="h-5 w-5" />
         </button>
       )}
-    </>
+    </div>
   )
 }
 
